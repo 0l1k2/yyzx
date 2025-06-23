@@ -1,3 +1,23 @@
+#应用服务web访问接口
+server:
+    port: 80
+    servlet:
+       context-path: /yyzx
+#数据库配置
 spring:
-  port=80
+   datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/yyzx?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+      type: com.alibaba.druid.pool.DruidDataSource
+      username: root
+      password: 123456
+   jackson:
+     date-format: yyyy-MM-dd
+     time-zone: GMT+8
 
+#Mybatis-plus配置
+mybatis-plus:
+   configuration:
+     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+   mapper-locations: classpath*:com.cy.mapper/*.xml
+   type-aliases-package: com.cy.domain
