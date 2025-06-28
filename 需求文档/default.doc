@@ -1,0 +1,4215 @@
+<!DOCTYPE HTML PUBLIC "-// W3C//DTD HTML 4.0 Transitional//EN">
+  <html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+      <title>导出Swagger文档到Word</title>
+      <script src="https:// cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+      <style type="text/css">
+          .knife4j-word-body{
+              width: 90%;
+              margin: 20px auto;
+              font-family:"宋体";
+              font-size: 16px;
+          }
+          .knife4j-word-row{
+              position: relative;
+              height: auto;
+              margin-right: 0;
+              margin-left: 0;
+              zoom: 1;
+              display: block;
+              box-sizing: border-box;
+          }
+          .knife4j-word-line{
+              height: 35px;
+              line-height:35px;
+          }
+          .knife4j-word-divider{
+              height: 1px;
+              background: #e8e8e8;
+              border-bottom: 1px solid #e8e8e8;
+          }
+          .knife4j-word-title{
+              font-weight: 600;
+              font-size: 18px;
+              margin-top: 15px;
+              border-left: 3px solid #00ab6d;
+          }
+          .knife4j-word-api{
+              margin-top: 10px;
+          }
+          .knife4j-word-content{
+              margin-top: 10px;
+          }
+          .knife4j-word-code-editor{
+              border: #ccc 1px solid;
+              border-left-width: 4px;
+              background-color: #fefefe;
+              box-shadow: 0 0 4px #eee;
+              word-break: break-all;
+              word-wrap: break-word;
+              color: #444;
+          }
+          .knife4j-word-code-editor .string { color: green; }        /*字符串的样式*/
+          .knife4j-word-code-editor .number { color: darkorange; }    /*数字的样式*/
+          .knife4j-word-code-editor .boolean { color: blue; }        /*布尔型数据的样式*/
+          .knife4j-word-code-editor .null { color: magenta; }        /*null值的样式*/
+          .knife4j-word-code-editor .key { color: red; }            /*key值的样式*/
+          .knife4j-word-method{
+              font-size: 14px;
+              font-weight: 600;
+              margin-right: 10px;
+              text-align: center;
+              border-radius: 3px;
+              text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+          }
+          .knife4j-word-table{
+              width: 120%;
+              border: 1px solid #c7c4c4;
+              border-collapse: collapse;
+          }
+          .knife4j-word-table tr{
+              border: 1px solid #c7c4c4;
+              height: 40px;
+          }
+          .knife4j-word-table th{
+              border: 1px solid #c7c4c4;
+              background-color: #dfdada;
+          }
+          .knife4j-word-table td{
+              border: 1px solid #c7c4c4;
+          }
+      </style>
+  </head>
+  <body>
+  <div class="knife4j-word-body">
+<h1>1.项目说明</h1>
+<div class="knife4j-word-row">
+<div class="knife4j-word-line"><strong>标题</strong>:OpenAPI definition</div>
+<div class="knife4j-word-divider"></div>
+<div class="knife4j-word-line"><strong>简介</strong>:OpenAPI definition</div>
+<div class="knife4j-word-divider"></div>
+<div class="knife4j-word-line"><strong>作者</strong>:<code></code></div>
+<div class="knife4j-word-divider"></div>
+<div class="knife4j-word-line"><strong>HOST</strong>:http://localhost/yyzx</div>
+<div class="knife4j-word-divider"></div>
+<div class="knife4j-word-line"><strong>basePath</strong>:/yyzx</div>
+<div class="knife4j-word-divider"></div>
+<div class="knife4j-word-line"><strong>termsOfService</strong>:</div>
+<div class="knife4j-word-divider"></div>
+<div class="knife4j-word-line"><strong>联系人</strong>:</div>
+<div class="knife4j-word-divider"></div>
+<div class="knife4j-word-line"><strong>Version</strong>:v0</div>
+<div class="knife4j-word-divider"></div>
+<div class="knife4j-word-line"><strong>GroupName</strong>:default</div>
+<div class="knife4j-word-divider"></div>
+<div class="knife4j-word-line"><strong>分组Url</strong>:/yyzx/v3/api-docs</div>
+<div class="knife4j-word-divider"></div>
+<div class="knife4j-word-line"><strong>分组Location</strong>:/yyzx/v3/api-docs</div>
+<div class="knife4j-word-divider"></div>
+</div>
+
+
+<h1>2.接口列表</h1>
+<h2>2.1用户管理</h2>
+
+
+
+
+<h3>2.1.1修改用户</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/user/updateUser</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"id":</span> <span class="number">0</span>,
+  <span class="key">"createTime":</span> <span class="string">""</span>,
+  <span class="key">"createBy":</span> <span class="number">0</span>,
+  <span class="key">"updateTime":</span> <span class="string">""</span>,
+  <span class="key">"updateBy":</span> <span class="number">0</span>,
+  <span class="key">"isDeleted":</span> <span class="number">0</span>,
+  <span class="key">"nickname":</span> <span class="string">""</span>,
+  <span class="key">"username":</span> <span class="string">""</span>,
+  <span class="key">"password":</span> <span class="string">""</span>,
+  <span class="key">"sex":</span> <span class="number">0</span>,
+  <span class="key">"email":</span> <span class="string">""</span>,
+  <span class="key">"phoneNumber":</span> <span class="string">""</span>,
+  <span class="key">"roleId":</span> <span class="number">0</span>,
+  <span class="key">"menuslist":</span> [
+    {
+      <span class="key">"id":</span> <span class="number">0</span>,
+      <span class="key">"menusIndex":</span> <span class="string">""</span>,
+      <span class="key">"title":</span> <span class="string">""</span>,
+      <span class="key">"icon":</span> <span class="string">""</span>,
+      <span class="key">"path":</span> <span class="string">""</span>,
+      <span class="key">"parentId":</span> <span class="number">0</span>,
+      <span class="key">"children":</span> [
+        {
+          <span class="key">"id":</span> <span class="number">0</span>,
+          <span class="key">"menusIndex":</span> <span class="string">""</span>,
+          <span class="key">"title":</span> <span class="string">""</span>,
+          <span class="key">"icon":</span> <span class="string">""</span>,
+          <span class="key">"path":</span> <span class="string">""</span>,
+          <span class="key">"parentId":</span> <span class="number">0</span>,
+          <span class="key">"children":</span> [
+            {}
+          ]
+        }
+      ]
+    }
+  ]
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>用户</td>
+<td>用户</td>
+<td>body</td>
+<td>true</td>
+<td>用户</td>
+<td>用户</td>
+</tr>
+<tr>
+<td>&nbsp;id</td>
+<td>主键</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;createTime</td>
+<td>创建时间</td>
+<td></td>
+<td>false</td>
+<td>string(date-time)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;createBy</td>
+<td>创建者</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;updateTime</td>
+<td>更新时间</td>
+<td></td>
+<td>false</td>
+<td>string(date-time)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;updateBy</td>
+<td>更新者</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;isDeleted</td>
+<td>逻辑删除标记（0：显示；1：隐藏）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;nickname</td>
+<td>真实姓名</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;username</td>
+<td>系统账号</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;password</td>
+<td>密码</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;sex</td>
+<td>性别（0：女  1：男）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;email</td>
+<td>邮箱</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;phoneNumber</td>
+<td>电话号码</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;roleId</td>
+<td>系统角色编号（1-管理员 2-健康管家）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;menuslist</td>
+<td>当前用户的角色菜单</td>
+<td></td>
+<td>false</td>
+<td>array</td>
+<td>Menu</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;id</td>
+<td>主键</td>
+<td></td>
+<td>false</td>
+<td>integer</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;menusIndex</td>
+<td>一级菜单索引</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;title</td>
+<td>菜单标题</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;icon</td>
+<td>菜单图标</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;path</td>
+<td>菜单路径</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;parentId</td>
+<td>父级Id</td>
+<td></td>
+<td>false</td>
+<td>integer</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;children</td>
+<td>子菜单</td>
+<td></td>
+<td>false</td>
+<td>array</td>
+<td>Menu</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.1.2用户登录</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/user/login</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"><p>用户登录接口</p>
+</div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"id":</span> <span class="number">0</span>,
+  <span class="key">"createTime":</span> <span class="string">""</span>,
+  <span class="key">"createBy":</span> <span class="number">0</span>,
+  <span class="key">"updateTime":</span> <span class="string">""</span>,
+  <span class="key">"updateBy":</span> <span class="number">0</span>,
+  <span class="key">"isDeleted":</span> <span class="number">0</span>,
+  <span class="key">"nickname":</span> <span class="string">""</span>,
+  <span class="key">"username":</span> <span class="string">""</span>,
+  <span class="key">"password":</span> <span class="string">""</span>,
+  <span class="key">"sex":</span> <span class="number">0</span>,
+  <span class="key">"email":</span> <span class="string">""</span>,
+  <span class="key">"phoneNumber":</span> <span class="string">""</span>,
+  <span class="key">"roleId":</span> <span class="number">0</span>,
+  <span class="key">"menuslist":</span> [
+    {
+      <span class="key">"id":</span> <span class="number">0</span>,
+      <span class="key">"menusIndex":</span> <span class="string">""</span>,
+      <span class="key">"title":</span> <span class="string">""</span>,
+      <span class="key">"icon":</span> <span class="string">""</span>,
+      <span class="key">"path":</span> <span class="string">""</span>,
+      <span class="key">"parentId":</span> <span class="number">0</span>,
+      <span class="key">"children":</span> [
+        {
+          <span class="key">"id":</span> <span class="number">0</span>,
+          <span class="key">"menusIndex":</span> <span class="string">""</span>,
+          <span class="key">"title":</span> <span class="string">""</span>,
+          <span class="key">"icon":</span> <span class="string">""</span>,
+          <span class="key">"path":</span> <span class="string">""</span>,
+          <span class="key">"parentId":</span> <span class="number">0</span>,
+          <span class="key">"children":</span> [
+            {}
+          ]
+        }
+      ]
+    }
+  ]
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>用户</td>
+<td>用户</td>
+<td>body</td>
+<td>true</td>
+<td>用户</td>
+<td>用户</td>
+</tr>
+<tr>
+<td>&nbsp;id</td>
+<td>主键</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;createTime</td>
+<td>创建时间</td>
+<td></td>
+<td>false</td>
+<td>string(date-time)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;createBy</td>
+<td>创建者</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;updateTime</td>
+<td>更新时间</td>
+<td></td>
+<td>false</td>
+<td>string(date-time)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;updateBy</td>
+<td>更新者</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;isDeleted</td>
+<td>逻辑删除标记（0：显示；1：隐藏）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;nickname</td>
+<td>真实姓名</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;username</td>
+<td>系统账号</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;password</td>
+<td>密码</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;sex</td>
+<td>性别（0：女  1：男）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;email</td>
+<td>邮箱</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;phoneNumber</td>
+<td>电话号码</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;roleId</td>
+<td>系统角色编号（1-管理员 2-健康管家）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;menuslist</td>
+<td>当前用户的角色菜单</td>
+<td></td>
+<td>false</td>
+<td>array</td>
+<td>Menu</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;id</td>
+<td>主键</td>
+<td></td>
+<td>false</td>
+<td>integer</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;menusIndex</td>
+<td>一级菜单索引</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;title</td>
+<td>菜单标题</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;icon</td>
+<td>菜单图标</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;path</td>
+<td>菜单路径</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;parentId</td>
+<td>父级Id</td>
+<td></td>
+<td>false</td>
+<td>integer</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;children</td>
+<td>子菜单</td>
+<td></td>
+<td>false</td>
+<td>array</td>
+<td>Menu</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.1.3查询系统用户-分页</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/user/findUserPage</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"roleId":</span> <span class="number">0</span>,
+  <span class="key">"currentPage":</span> <span class="number">0</span>,
+  <span class="key">"pageSize":</span> <span class="number">0</span>,
+  <span class="key">"nickName":</span> <span class="string">""</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>userDto-用户查询条件</td>
+<td>UserDto-用户查询条件</td>
+<td>body</td>
+<td>true</td>
+<td>UserDto-用户查询条件</td>
+<td>UserDto-用户查询条件</td>
+</tr>
+<tr>
+<td>&nbsp;roleId</td>
+<td>用户ID</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;currentPage</td>
+<td>当前页</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;pageSize</td>
+<td>每页显示数量</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;nickName</td>
+<td>真实姓名</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.1.4查询所有用户-分页</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/user/findUserPageByRoleId</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"roleId":</span> <span class="number">0</span>,
+  <span class="key">"currentPage":</span> <span class="number">0</span>,
+  <span class="key">"pageSize":</span> <span class="number">0</span>,
+  <span class="key">"nickName":</span> <span class="string">""</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>userDto-用户查询条件</td>
+<td>UserDto-用户查询条件</td>
+<td>body</td>
+<td>true</td>
+<td>UserDto-用户查询条件</td>
+<td>UserDto-用户查询条件</td>
+</tr>
+<tr>
+<td>&nbsp;roleId</td>
+<td>用户ID</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;currentPage</td>
+<td>当前页</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;pageSize</td>
+<td>每页显示数量</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;nickName</td>
+<td>真实姓名</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.1.5添加用户</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/user/addUser</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"id":</span> <span class="number">0</span>,
+  <span class="key">"createTime":</span> <span class="string">""</span>,
+  <span class="key">"createBy":</span> <span class="number">0</span>,
+  <span class="key">"updateTime":</span> <span class="string">""</span>,
+  <span class="key">"updateBy":</span> <span class="number">0</span>,
+  <span class="key">"isDeleted":</span> <span class="number">0</span>,
+  <span class="key">"nickname":</span> <span class="string">""</span>,
+  <span class="key">"username":</span> <span class="string">""</span>,
+  <span class="key">"password":</span> <span class="string">""</span>,
+  <span class="key">"sex":</span> <span class="number">0</span>,
+  <span class="key">"email":</span> <span class="string">""</span>,
+  <span class="key">"phoneNumber":</span> <span class="string">""</span>,
+  <span class="key">"roleId":</span> <span class="number">0</span>,
+  <span class="key">"menuslist":</span> [
+    {
+      <span class="key">"id":</span> <span class="number">0</span>,
+      <span class="key">"menusIndex":</span> <span class="string">""</span>,
+      <span class="key">"title":</span> <span class="string">""</span>,
+      <span class="key">"icon":</span> <span class="string">""</span>,
+      <span class="key">"path":</span> <span class="string">""</span>,
+      <span class="key">"parentId":</span> <span class="number">0</span>,
+      <span class="key">"children":</span> [
+        {
+          <span class="key">"id":</span> <span class="number">0</span>,
+          <span class="key">"menusIndex":</span> <span class="string">""</span>,
+          <span class="key">"title":</span> <span class="string">""</span>,
+          <span class="key">"icon":</span> <span class="string">""</span>,
+          <span class="key">"path":</span> <span class="string">""</span>,
+          <span class="key">"parentId":</span> <span class="number">0</span>,
+          <span class="key">"children":</span> [
+            {}
+          ]
+        }
+      ]
+    }
+  ]
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>用户</td>
+<td>用户</td>
+<td>body</td>
+<td>true</td>
+<td>用户</td>
+<td>用户</td>
+</tr>
+<tr>
+<td>&nbsp;id</td>
+<td>主键</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;createTime</td>
+<td>创建时间</td>
+<td></td>
+<td>false</td>
+<td>string(date-time)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;createBy</td>
+<td>创建者</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;updateTime</td>
+<td>更新时间</td>
+<td></td>
+<td>false</td>
+<td>string(date-time)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;updateBy</td>
+<td>更新者</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;isDeleted</td>
+<td>逻辑删除标记（0：显示；1：隐藏）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;nickname</td>
+<td>真实姓名</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;username</td>
+<td>系统账号</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;password</td>
+<td>密码</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;sex</td>
+<td>性别（0：女  1：男）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;email</td>
+<td>邮箱</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;phoneNumber</td>
+<td>电话号码</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;roleId</td>
+<td>系统角色编号（1-管理员 2-健康管家）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;menuslist</td>
+<td>当前用户的角色菜单</td>
+<td></td>
+<td>false</td>
+<td>array</td>
+<td>Menu</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;id</td>
+<td>主键</td>
+<td></td>
+<td>false</td>
+<td>integer</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;menusIndex</td>
+<td>一级菜单索引</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;title</td>
+<td>菜单标题</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;icon</td>
+<td>菜单图标</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;path</td>
+<td>菜单路径</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;parentId</td>
+<td>父级Id</td>
+<td></td>
+<td>false</td>
+<td>integer</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;children</td>
+<td>子菜单</td>
+<td></td>
+<td>false</td>
+<td>array</td>
+<td>Menu</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.1.6删除用户</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">GET</span>&nbsp;&nbsp;<code>/yyzx/user/deleteUser/{id}</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>id</td>
+<td></td>
+<td>path</td>
+<td>true</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+<h2>2.2外出管理</h2>
+
+
+
+
+<h3>2.2.1登记回院时间</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/outward/updateBackTime</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"id":</span> <span class="number">0</span>,
+  <span class="key">"remarks":</span> <span class="string">""</span>,
+  <span class="key">"is_deleted":</span> <span class="number">0</span>,
+  <span class="key">"customer_id":</span> <span class="number">0</span>,
+  <span class="key">"outgoingreason":</span> <span class="string">""</span>,
+  <span class="key">"outgoingtime":</span> <span class="string">""</span>,
+  <span class="key">"expectedreturntime":</span> <span class="string">""</span>,
+  <span class="key">"actualreturntime":</span> <span class="string">""</span>,
+  <span class="key">"escorted":</span> <span class="string">""</span>,
+  <span class="key">"relation":</span> <span class="string">""</span>,
+  <span class="key">"escortedtel":</span> <span class="string">""</span>,
+  <span class="key">"auditstatus":</span> <span class="number">0</span>,
+  <span class="key">"auditperson":</span> <span class="string">""</span>,
+  <span class="key">"audittime":</span> <span class="string">""</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>outward</td>
+<td>出差申请</td>
+<td>body</td>
+<td>true</td>
+<td>Outward</td>
+<td>Outward</td>
+</tr>
+<tr>
+<td>&nbsp;id</td>
+<td>主键</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;remarks</td>
+<td>备注</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;is_deleted</td>
+<td>逻辑删除标记（0：显示；1：隐藏）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;customer_id</td>
+<td>客户ID</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;outgoingreason</td>
+<td>外出事由</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;outgoingtime</td>
+<td>外出时间</td>
+<td></td>
+<td>false</td>
+<td>string(date)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;expectedreturntime</td>
+<td>预计回院时间</td>
+<td></td>
+<td>false</td>
+<td>string(date)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;actualreturntime</td>
+<td>实际回院时间</td>
+<td></td>
+<td>false</td>
+<td>string(date)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;escorted</td>
+<td>陪同人</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;relation</td>
+<td>与老人关系</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;escortedtel</td>
+<td>陪同人电话</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;auditstatus</td>
+<td>审批状态  0-已提交 1-同意  2-拒绝</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;auditperson</td>
+<td>审批人</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;audittime</td>
+<td>审批时间</td>
+<td></td>
+<td>false</td>
+<td>string(date)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.2.2根据用户id查询对应的客户信息</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/outward/selectOuterwardVo</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"currentPage":</span> <span class="number">0</span>,
+  <span class="key">"pageSize":</span> <span class="number">0</span>,
+  <span class="key">"userId":</span> <span class="number">0</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>dto对象</td>
+<td>dto对象</td>
+<td>body</td>
+<td>true</td>
+<td>dto对象</td>
+<td>dto对象</td>
+</tr>
+<tr>
+<td>&nbsp;currentPage</td>
+<td>当前页</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;pageSize</td>
+<td>每页显示数量</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;userId</td>
+<td>用户Id</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.2.3外出审批</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/outward/examineOutward</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"id":</span> <span class="number">0</span>,
+  <span class="key">"remarks":</span> <span class="string">""</span>,
+  <span class="key">"is_deleted":</span> <span class="number">0</span>,
+  <span class="key">"customer_id":</span> <span class="number">0</span>,
+  <span class="key">"outgoingreason":</span> <span class="string">""</span>,
+  <span class="key">"outgoingtime":</span> <span class="string">""</span>,
+  <span class="key">"expectedreturntime":</span> <span class="string">""</span>,
+  <span class="key">"actualreturntime":</span> <span class="string">""</span>,
+  <span class="key">"escorted":</span> <span class="string">""</span>,
+  <span class="key">"relation":</span> <span class="string">""</span>,
+  <span class="key">"escortedtel":</span> <span class="string">""</span>,
+  <span class="key">"auditstatus":</span> <span class="number">0</span>,
+  <span class="key">"auditperson":</span> <span class="string">""</span>,
+  <span class="key">"audittime":</span> <span class="string">""</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>outward</td>
+<td>出差申请</td>
+<td>body</td>
+<td>true</td>
+<td>Outward</td>
+<td>Outward</td>
+</tr>
+<tr>
+<td>&nbsp;id</td>
+<td>主键</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;remarks</td>
+<td>备注</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;is_deleted</td>
+<td>逻辑删除标记（0：显示；1：隐藏）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;customer_id</td>
+<td>客户ID</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;outgoingreason</td>
+<td>外出事由</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;outgoingtime</td>
+<td>外出时间</td>
+<td></td>
+<td>false</td>
+<td>string(date)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;expectedreturntime</td>
+<td>预计回院时间</td>
+<td></td>
+<td>false</td>
+<td>string(date)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;actualreturntime</td>
+<td>实际回院时间</td>
+<td></td>
+<td>false</td>
+<td>string(date)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;escorted</td>
+<td>陪同人</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;relation</td>
+<td>与老人关系</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;escortedtel</td>
+<td>陪同人电话</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;auditstatus</td>
+<td>审批状态  0-已提交 1-同意  2-拒绝</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;auditperson</td>
+<td>审批人</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;audittime</td>
+<td>审批时间</td>
+<td></td>
+<td>false</td>
+<td>string(date)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.2.4添加外出审批</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/outward/addOutward</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"id":</span> <span class="number">0</span>,
+  <span class="key">"remarks":</span> <span class="string">""</span>,
+  <span class="key">"is_deleted":</span> <span class="number">0</span>,
+  <span class="key">"customer_id":</span> <span class="number">0</span>,
+  <span class="key">"outgoingreason":</span> <span class="string">""</span>,
+  <span class="key">"outgoingtime":</span> <span class="string">""</span>,
+  <span class="key">"expectedreturntime":</span> <span class="string">""</span>,
+  <span class="key">"actualreturntime":</span> <span class="string">""</span>,
+  <span class="key">"escorted":</span> <span class="string">""</span>,
+  <span class="key">"relation":</span> <span class="string">""</span>,
+  <span class="key">"escortedtel":</span> <span class="string">""</span>,
+  <span class="key">"auditstatus":</span> <span class="number">0</span>,
+  <span class="key">"auditperson":</span> <span class="string">""</span>,
+  <span class="key">"audittime":</span> <span class="string">""</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>outward</td>
+<td>出差申请</td>
+<td>body</td>
+<td>true</td>
+<td>Outward</td>
+<td>Outward</td>
+</tr>
+<tr>
+<td>&nbsp;id</td>
+<td>主键</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;remarks</td>
+<td>备注</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;is_deleted</td>
+<td>逻辑删除标记（0：显示；1：隐藏）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;customer_id</td>
+<td>客户ID</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;outgoingreason</td>
+<td>外出事由</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;outgoingtime</td>
+<td>外出时间</td>
+<td></td>
+<td>false</td>
+<td>string(date)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;expectedreturntime</td>
+<td>预计回院时间</td>
+<td></td>
+<td>false</td>
+<td>string(date)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;actualreturntime</td>
+<td>实际回院时间</td>
+<td></td>
+<td>false</td>
+<td>string(date)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;escorted</td>
+<td>陪同人</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;relation</td>
+<td>与老人关系</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;escortedtel</td>
+<td>陪同人电话</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;auditstatus</td>
+<td>审批状态  0-已提交 1-同意  2-拒绝</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;auditperson</td>
+<td>审批人</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;audittime</td>
+<td>审批时间</td>
+<td></td>
+<td>false</td>
+<td>string(date)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.2.5撤回外出审批</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">GET</span>&nbsp;&nbsp;<code>/yyzx/outward/delOutward/{id}</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>id</td>
+<td></td>
+<td>path</td>
+<td>true</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+<h2>2.3膳食日历管理</h2>
+
+
+
+
+<h3>2.3.1更新膳食</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/meal/updateMeal</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"id":</span> <span class="number">0</span>,
+  <span class="key">"weekDay":</span> <span class="string">""</span>,
+  <span class="key">"foodId":</span> <span class="number">0</span>,
+  <span class="key">"mealType":</span> <span class="number">0</span>,
+  <span class="key">"taste":</span> <span class="string">""</span>,
+  <span class="key">"isDeleted":</span> <span class="number">0</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>饮食</td>
+<td>饮食</td>
+<td>body</td>
+<td>true</td>
+<td>饮食</td>
+<td>饮食</td>
+</tr>
+<tr>
+<td>&nbsp;id</td>
+<td>饮食ID</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;weekDay</td>
+<td>星期几</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;foodId</td>
+<td>食品ID</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;mealType</td>
+<td>食品类型（1.早餐、2.午餐、3.晚餐）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;taste</td>
+<td>口味（多糖、多盐、少糖、少盐）</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;isDeleted</td>
+<td>是否删除</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.3.2膳食查询-分页查询-根据星期查询，根据膳食类型（早餐-中餐-晚餐）</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/meal/listMealPage</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"currentPage":</span> <span class="number">0</span>,
+  <span class="key">"pageSize":</span> <span class="number">0</span>,
+  <span class="key">"weekDay":</span> <span class="string">""</span>,
+  <span class="key">"mealType":</span> <span class="number">0</span>,
+  <span class="key">"mealId":</span> <span class="number">0</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>mealDto对象</td>
+<td>MealDto对象</td>
+<td>body</td>
+<td>true</td>
+<td>MealDto对象</td>
+<td>MealDto对象</td>
+</tr>
+<tr>
+<td>&nbsp;currentPage</td>
+<td>当前页码</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;pageSize</td>
+<td>每页显示数量</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;weekDay</td>
+<td>星期几</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;mealType</td>
+<td>早餐/中餐/晚餐</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;mealId</td>
+<td>食谱编号</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.3.3添加膳食</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/meal/addMeal</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"id":</span> <span class="number">0</span>,
+  <span class="key">"weekDay":</span> <span class="string">""</span>,
+  <span class="key">"foodId":</span> <span class="number">0</span>,
+  <span class="key">"mealType":</span> <span class="number">0</span>,
+  <span class="key">"taste":</span> <span class="string">""</span>,
+  <span class="key">"isDeleted":</span> <span class="number">0</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>饮食</td>
+<td>饮食</td>
+<td>body</td>
+<td>true</td>
+<td>饮食</td>
+<td>饮食</td>
+</tr>
+<tr>
+<td>&nbsp;id</td>
+<td>饮食ID</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;weekDay</td>
+<td>星期几</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;foodId</td>
+<td>食品ID</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;mealType</td>
+<td>食品类型（1.早餐、2.午餐、3.晚餐）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;taste</td>
+<td>口味（多糖、多盐、少糖、少盐）</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;isDeleted</td>
+<td>是否删除</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.3.4删除膳食</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">GET</span>&nbsp;&nbsp;<code>/yyzx/meal/removeMeal/{id}</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>id</td>
+<td></td>
+<td>path</td>
+<td>true</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+<h2>2.4客户喜好管理</h2>
+
+
+
+
+<h3>2.4.1修改客户喜好</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/customerpreference/updateCustomerpreference</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"id":</span> <span class="number">0</span>,
+  <span class="key">"customerId":</span> <span class="number">0</span>,
+  <span class="key">"preferences":</span> <span class="string">""</span>,
+  <span class="key">"attention":</span> <span class="string">""</span>,
+  <span class="key">"remark":</span> <span class="string">""</span>,
+  <span class="key">"isDeleted":</span> <span class="number">0</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>customerpreference</td>
+<td>顾客偏好</td>
+<td>body</td>
+<td>true</td>
+<td>Customerpreference</td>
+<td>Customerpreference</td>
+</tr>
+<tr>
+<td>&nbsp;id</td>
+<td>喜好ID</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;customerId</td>
+<td>顾客ID</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;preferences</td>
+<td>饮食喜好</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;attention</td>
+<td>注意事项</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;remark</td>
+<td>备注</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;isDeleted</td>
+<td>是否删除</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.4.2查询客户喜好-分页，可以根据客户姓名查询</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/customerpreference/getCustomerpreferencesVo</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"currentPage":</span> <span class="number">0</span>,
+  <span class="key">"pageSize":</span> <span class="number">0</span>,
+  <span class="key">"customerName":</span> <span class="string">""</span>,
+  <span class="key">"preferenceId":</span> <span class="string">""</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>customerpreferenceDto对象</td>
+<td>CustomerpreferenceDto对象</td>
+<td>body</td>
+<td>true</td>
+<td>CustomerpreferenceDto对象</td>
+<td>CustomerpreferenceDto对象</td>
+</tr>
+<tr>
+<td>&nbsp;currentPage</td>
+<td>当前页码</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;pageSize</td>
+<td>每页显示数量</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;customerName</td>
+<td>客户名称</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;preferenceId</td>
+<td>喜好编号</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.4.3添加客户喜好</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/customerpreference/addCustomerpreference</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"id":</span> <span class="number">0</span>,
+  <span class="key">"customerId":</span> <span class="number">0</span>,
+  <span class="key">"preferences":</span> <span class="string">""</span>,
+  <span class="key">"attention":</span> <span class="string">""</span>,
+  <span class="key">"remark":</span> <span class="string">""</span>,
+  <span class="key">"isDeleted":</span> <span class="number">0</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>customerpreference</td>
+<td>顾客偏好</td>
+<td>body</td>
+<td>true</td>
+<td>Customerpreference</td>
+<td>Customerpreference</td>
+</tr>
+<tr>
+<td>&nbsp;id</td>
+<td>喜好ID</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;customerId</td>
+<td>顾客ID</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;preferences</td>
+<td>饮食喜好</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;attention</td>
+<td>注意事项</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;remark</td>
+<td>备注</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;isDeleted</td>
+<td>是否删除</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.4.4删除客户喜好</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">GET</span>&nbsp;&nbsp;<code>/yyzx/customerpreference/removeCustomerpreference/{id}</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>id</td>
+<td></td>
+<td>path</td>
+<td>true</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+<h2>2.5客户管理</h2>
+
+
+
+
+<h3>2.5.1编辑客户信息</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/customer/editCustomer</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"id":</span> <span class="number">0</span>,
+  <span class="key">"isDeleted":</span> <span class="number">0</span>,
+  <span class="key">"customerName":</span> <span class="string">""</span>,
+  <span class="key">"customerAge":</span> <span class="number">0</span>,
+  <span class="key">"customerSex":</span> <span class="number">0</span>,
+  <span class="key">"idcard":</span> <span class="string">""</span>,
+  <span class="key">"roomNo":</span> <span class="string">""</span>,
+  <span class="key">"buildingNo":</span> <span class="string">""</span>,
+  <span class="key">"checkinDate":</span> <span class="string">""</span>,
+  <span class="key">"expirationDate":</span> <span class="string">""</span>,
+  <span class="key">"contactTel":</span> <span class="string">""</span>,
+  <span class="key">"bedId":</span> <span class="number">0</span>,
+  <span class="key">"psychosomaticState":</span> <span class="string">""</span>,
+  <span class="key">"attention":</span> <span class="string">""</span>,
+  <span class="key">"birthday":</span> <span class="string">""</span>,
+  <span class="key">"height":</span> <span class="string">""</span>,
+  <span class="key">"weight":</span> <span class="string">""</span>,
+  <span class="key">"bloodType":</span> <span class="string">""</span>,
+  <span class="key">"filepath":</span> <span class="string">""</span>,
+  <span class="key">"userId":</span> <span class="number">0</span>,
+  <span class="key">"levelId":</span> <span class="number">0</span>,
+  <span class="key">"familyMember":</span> <span class="string">""</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>customer对象</td>
+<td>customer对象</td>
+<td>body</td>
+<td>true</td>
+<td>customer对象</td>
+<td>customer对象</td>
+</tr>
+<tr>
+<td>&nbsp;id</td>
+<td>主键</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;isDeleted</td>
+<td>逻辑删除标记（0：显示；1：隐藏）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;customerName</td>
+<td>客户姓名</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;customerAge</td>
+<td>年龄</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;customerSex</td>
+<td>性别  0：男  1：女</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;idcard</td>
+<td>身份证号</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;roomNo</td>
+<td>房间号</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;buildingNo</td>
+<td>所属楼房</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;checkinDate</td>
+<td>入住时间</td>
+<td></td>
+<td>false</td>
+<td>string(date-time)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;expirationDate</td>
+<td>合同到期时间</td>
+<td></td>
+<td>false</td>
+<td>string(date-time)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;contactTel</td>
+<td>联系电话</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;bedId</td>
+<td>床号</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;psychosomaticState</td>
+<td>身心状况</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;attention</td>
+<td>注意事项</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;birthday</td>
+<td>出生日期</td>
+<td></td>
+<td>false</td>
+<td>string(date-time)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;height</td>
+<td>身高</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;weight</td>
+<td>体重</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;bloodType</td>
+<td>血型</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;filepath</td>
+<td>头像路径</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;userId</td>
+<td>关联系统健康管家(护工)  无管家设置  -1</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;levelId</td>
+<td>护理等级</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;familyMember</td>
+<td>家属</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.5.2入住登记</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/customer/addCustomer</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"id":</span> <span class="number">0</span>,
+  <span class="key">"isDeleted":</span> <span class="number">0</span>,
+  <span class="key">"customerName":</span> <span class="string">""</span>,
+  <span class="key">"customerAge":</span> <span class="number">0</span>,
+  <span class="key">"customerSex":</span> <span class="number">0</span>,
+  <span class="key">"idcard":</span> <span class="string">""</span>,
+  <span class="key">"roomNo":</span> <span class="string">""</span>,
+  <span class="key">"buildingNo":</span> <span class="string">""</span>,
+  <span class="key">"checkinDate":</span> <span class="string">""</span>,
+  <span class="key">"expirationDate":</span> <span class="string">""</span>,
+  <span class="key">"contactTel":</span> <span class="string">""</span>,
+  <span class="key">"bedId":</span> <span class="number">0</span>,
+  <span class="key">"psychosomaticState":</span> <span class="string">""</span>,
+  <span class="key">"attention":</span> <span class="string">""</span>,
+  <span class="key">"birthday":</span> <span class="string">""</span>,
+  <span class="key">"height":</span> <span class="string">""</span>,
+  <span class="key">"weight":</span> <span class="string">""</span>,
+  <span class="key">"bloodType":</span> <span class="string">""</span>,
+  <span class="key">"filepath":</span> <span class="string">""</span>,
+  <span class="key">"userId":</span> <span class="number">0</span>,
+  <span class="key">"levelId":</span> <span class="number">0</span>,
+  <span class="key">"familyMember":</span> <span class="string">""</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>customer对象</td>
+<td>customer对象</td>
+<td>body</td>
+<td>true</td>
+<td>customer对象</td>
+<td>customer对象</td>
+</tr>
+<tr>
+<td>&nbsp;id</td>
+<td>主键</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;isDeleted</td>
+<td>逻辑删除标记（0：显示；1：隐藏）</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;customerName</td>
+<td>客户姓名</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;customerAge</td>
+<td>年龄</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;customerSex</td>
+<td>性别  0：男  1：女</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;idcard</td>
+<td>身份证号</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;roomNo</td>
+<td>房间号</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;buildingNo</td>
+<td>所属楼房</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;checkinDate</td>
+<td>入住时间</td>
+<td></td>
+<td>false</td>
+<td>string(date-time)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;expirationDate</td>
+<td>合同到期时间</td>
+<td></td>
+<td>false</td>
+<td>string(date-time)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;contactTel</td>
+<td>联系电话</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;bedId</td>
+<td>床号</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;psychosomaticState</td>
+<td>身心状况</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;attention</td>
+<td>注意事项</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;birthday</td>
+<td>出生日期</td>
+<td></td>
+<td>false</td>
+<td>string(date-time)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;height</td>
+<td>身高</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;weight</td>
+<td>体重</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;bloodType</td>
+<td>血型</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;filepath</td>
+<td>头像路径</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;userId</td>
+<td>关联系统健康管家(护工)  无管家设置  -1</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;levelId</td>
+<td>护理等级</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;familyMember</td>
+<td>家属</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.5.3动态获取客户信息-分页</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">POST</span>&nbsp;&nbsp;<code>/yyzx/customer/KhxxFindCustomer</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded,application/json</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+<div class="knife4j-word-title">请求示例</div>
+<div class="knife4j-word-content">
+<pre class="knife4j-word-code-editor">
+{
+  <span class="key">"customerName":</span> <span class="string">""</span>,
+  <span class="key">"manType":</span> <span class="number">0</span>,
+  <span class="key">"userId":</span> <span class="number">0</span>,
+  <span class="key">"currentPage":</span> <span class="number">0</span>,
+  <span class="key">"pageSize":</span> <span class="number">0</span>
+}
+</pre>
+</div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>khxxDto对象</td>
+<td>KhxxDto对象</td>
+<td>body</td>
+<td>true</td>
+<td>KhxxDto对象</td>
+<td>KhxxDto对象</td>
+</tr>
+<tr>
+<td>&nbsp;customerName</td>
+<td>客户姓名</td>
+<td></td>
+<td>false</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;manType</td>
+<td>老人类型:1:自理老人  2：护理老人   3：“无管家</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;userId</td>
+<td>系统健康管家Id</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;currentPage</td>
+<td>当前页</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;pageSize</td>
+<td>每页显示数量</td>
+<td></td>
+<td>false</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+
+
+<h3>2.5.4删除客户信息</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">GET</span>&nbsp;&nbsp;<code>/yyzx/customer/removeCustomer/{id}/{bedId}</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>id</td>
+<td></td>
+<td>path</td>
+<td>true</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>bedId</td>
+<td></td>
+<td>path</td>
+<td>true</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+<h2>2.6食品管理</h2>
+
+
+
+
+<h3>2.6.1查询所有食品</h3>
+<div class="knife4j-word-api">
+<div class="knife4j-word-title">接口地址</div>
+<div class="knife4j-word-content"><span class="knife4j-word-method">GET</span>&nbsp;&nbsp;<code>/yyzx/food/listFood/{currentPage}/{pageSize}</code></div>
+<div class="knife4j-word-title">接口描述</div>
+<div class="knife4j-word-content"></div>
+<div class="knife4j-word-title">请求数据类型</div>
+<div class="knife4j-word-content"><code>application/x-www-form-urlencoded</code></div>
+<div class="knife4j-word-title">响应数据类型</div>
+<div class="knife4j-word-content"><code>*/*</code></div>
+
+
+<div class="knife4j-word-title">请求参数</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>请求类型</th><th>必须</th><th>数据类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>currentPage</td>
+<td></td>
+<td>path</td>
+<td>true</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+<tr>
+<td>pageSize</td>
+<td></td>
+<td>path</td>
+<td>true</td>
+<td>integer(int32)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应状态</div><br/>
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>状态码</th><th>说明</th><th>schema</th></tr></thead>
+<tbody>
+
+
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>ResultVo</td>
+</tr>
+</tbody>
+</table><br/>
+</div>
+
+
+<div class="knife4j-word-title">响应参数</div>
+
+
+<div class="knife4j-word-content">
+<table class="knife4j-word-table">
+<thead><tr><th>参数名称</th><th>参数说明</th><th>类型</th><th>schema</th></tr></thead>
+<tbody>
+<tr>
+<td>flag</td>
+<td></td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>message</td>
+<td></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>data</td>
+<td></td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="knife4j-word-title">响应示例</div>
+<div class="knife4j-word-content"><pre class="knife4j-word-code-editor">
+{
+	<span class="key">"flag":</span> <span class="boolean">true</span>,
+	<span class="key">"message":</span> <span class="string">""</span>,
+	<span class="key">"data":</span> {}
+}
+</pre></div>
+</div>
+</div></body></html>

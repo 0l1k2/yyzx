@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.mapper.BackdownMapper">
+    <select id="listBackdownVo" resultType="com.cy.vo.BackdownVo">
+        select
+            bdn.id,
+            bdn.remarks,
+            bdn.is_deleted,
+            bdn.customer_id,
+            bdn.retreattime,
+            bdn.retreattype,
+            bdn.retreatreason,
+            bdn.auditstatus,
+            bdn.auditperson,
+            bdn.audittime,
+            bdd.beddetails,
+            cs.checkin_date,
+            cs.bed_id,
+            cs.customer_name,
+        from backdown bdn,customer cs ,beddetails bdd,user u
+        where cs.user_id = u.id
+          and bdn.customer_id = bdd.customer_id
+          and bdn.is_deleted = 0
+          <if test="userId !=null and userId !=''">
+              and u.id = #{userId}
+          </if>
+          limit #{currentPage},#{pageSize}
+    </select>
+
+    <select id="countBackdown" resultType="com.cy.vo.CountVo">
+        select
+        count(*) as count
+        from backdown bdn,customer cs ,beddetails bdd,user u
+        where cs.user_id = u.id
+        and bdn.customer_id = bdd.customer_id
+        and bdn.is_deleted = 0
+        <if test="userId !=null and userId !=''">
+            and u.id = #{userId}
+        </if>
+    </select>
+</mapper>
