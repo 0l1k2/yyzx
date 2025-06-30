@@ -11,6 +11,7 @@ import com.cy.utils.ResultVo;
 import com.cy.vo.ShowBedVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import java.util.List;
  * @since 2025-06-26
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements IRoomService {
     @Autowired
     private BedMapper bedMapper;

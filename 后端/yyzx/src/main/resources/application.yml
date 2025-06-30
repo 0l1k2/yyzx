@@ -21,3 +21,9 @@ mybatis-plus:
      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
    mapper-locations: classpath*:com.cy.mapper/*.xml
    type-aliases-package: com.cy.domain
+
+config:
+  jwt:
+    secret: cy123456   #JWT加密密钥
+    expire: 86400 #JWT过期时间，单位秒,默认24小时
+    header: token #JWT存放的Header名称

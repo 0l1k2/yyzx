@@ -36,7 +36,7 @@ public class Customernurseitem implements Serializable {
      * 客户编号
      */
     @Schema(description = "客户编号")
-    private Integer custormerId;
+    private Integer customerId;
 
     /**
      * 护理级别编号
@@ -61,7 +61,7 @@ public class Customernurseitem implements Serializable {
      * 服务购买日期
      */
     @Schema(description = "服务购买日期")
-    private LocalDate buyTime;
+    private Date buyTime;
 
     /**
      * 服务到期日

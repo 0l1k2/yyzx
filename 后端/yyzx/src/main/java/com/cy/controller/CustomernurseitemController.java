@@ -32,12 +32,12 @@ public class CustomernurseitemController {
     @GetMapping("/isIncludeItemCustormer/{custormerId}/{itemId}")
     public ResultVo isIncludeItemCustormer(@PathVariable Integer custormerId, @PathVariable Integer itemId) {
         LambdaQueryWrapper<Customernurseitem> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(Customernurseitem::getCustormerId, custormerId).eq(Customernurseitem::getItemId, itemId);
+        lqw.eq(Customernurseitem::getCustomerId, custormerId).eq(Customernurseitem::getItemId, itemId);
         int count = customernurseitemService.count(lqw);
         if(count>0){
             return ResultVo.ok("该客户已经配置了该项目");
         }
-        return ResultVo.ok("success");
+        return ResultVo.ok("该客户不存在该项目");
     }
 
     @Operation(summary="移除客户护理项目")
@@ -54,9 +54,9 @@ public class CustomernurseitemController {
     }
 
     @Operation(summary="为客户移除护理级别及其级联移除客户当前级别的护理项目")
-    @GetMapping("/removeCustomerLevelAndItem/{levelId}/{custormerId}")
-    public ResultVo removeCustomerLevelAndItem(@PathVariable Integer levelId, @PathVariable Integer custormerId) {
-        return customernurseitemService.removeCustomerLevelAndItem(levelId,custormerId);
+    @GetMapping("/removeCustomerLevelAndItem/{levelId}/{customerId}")
+    public ResultVo removeCustomerLevelAndItem(@PathVariable Integer levelId, @PathVariable Integer customerId) {
+        return customernurseitemService.removeCustomerLevelAndItem(levelId,customerId);
     }
 
     @Operation(summary="获取客户护理项目列表-分页")

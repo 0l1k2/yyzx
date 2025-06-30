@@ -25,7 +25,7 @@ import java.util.Map;
  * @since 2025-06-25
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 class CustomerpreferenceServiceImpl extends ServiceImpl<CustomerpreferenceMapper, Customerpreference> implements ICustomerpreferenceService {
     @Autowired
     private CustomerpreferenceMapper customerpreferenceMapper;

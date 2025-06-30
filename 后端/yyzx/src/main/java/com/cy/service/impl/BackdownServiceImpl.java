@@ -11,6 +11,7 @@ import com.cy.vo.BackdownVo;
 import com.cy.vo.CountVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class BackdownServiceImpl extends ServiceImpl<BackdownMapper, Backdown> implements IBackdownService {
     @Autowired
     private BackdownMapper backdownMapper;
@@ -34,6 +36,7 @@ public class BackdownServiceImpl extends ServiceImpl<BackdownMapper, Backdown> i
     public ResultVo lisBackdownVo(BackdownDto backdownDto) {
         Map<String,Object> map = new HashMap<>();
         map.put("currentPage",backdownDto.getCurrentPage());
+        backdownDto.setPageSize((backdownDto.getPageSize()-1)*backdownDto.getPageSize());
         List<BackdownVo> backdownVoList=backdownMapper.listBackdownVo(backdownDto);
         CountVo countVo = backdownMapper.countBackdown(backdownDto);
         map.put("records",backdownVoList);

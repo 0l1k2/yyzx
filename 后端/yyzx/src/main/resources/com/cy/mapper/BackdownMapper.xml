@@ -13,13 +13,14 @@
             bdn.auditstatus,
             bdn.auditperson,
             bdn.audittime,
-            bdd.beddetails,
+            bdd.bed_details,
             cs.checkin_date,
             cs.bed_id,
-            cs.customer_name,
+            cs.customer_name
         from backdown bdn,customer cs ,beddetails bdd,user u
         where cs.user_id = u.id
           and bdn.customer_id = bdd.customer_id
+          and cs.id=bdn.customer_id
           and bdn.is_deleted = 0
           <if test="userId !=null and userId !=''">
               and u.id = #{userId}
@@ -29,9 +30,10 @@
 
     <select id="countBackdown" resultType="com.cy.vo.CountVo">
         select
-        count(*) as count
+        distinct count(*) as count
         from backdown bdn,customer cs ,beddetails bdd,user u
         where cs.user_id = u.id
+        and cs.id=bdn.customer_id
         and bdn.customer_id = bdd.customer_id
         and bdn.is_deleted = 0
         <if test="userId !=null and userId !=''">

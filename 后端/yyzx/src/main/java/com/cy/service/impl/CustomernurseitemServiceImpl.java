@@ -15,6 +15,7 @@ import com.cy.vo.CustomerNurseItemVo;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.Map;
 
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class CustomernurseitemServiceImpl extends ServiceImpl<CustomernurseitemMapper, Customernurseitem> implements ICustomernurseitemService {
     @Autowired
     private CustomerMapper customerMapper;
@@ -35,7 +37,7 @@ public class CustomernurseitemServiceImpl extends ServiceImpl<CustomernurseitemM
            if (customernurseitems.get(0).getLevelId() != null) {//级别附带项目
                //设置客户护理级别
                Customer customer = new Customer();
-               customer.setId(customernurseitems.get(0).getCustormerId());
+               customer.setId(customernurseitems.get(0).getCustomerId());
                customer.setLevelId(customernurseitems.get(0).getLevelId());
                int count1 = customerMapper.updateById(customer);
                //批量给用户添加护理项目
@@ -60,7 +62,7 @@ public class CustomernurseitemServiceImpl extends ServiceImpl<CustomernurseitemM
        int count1 = customerMapper.update(null, luw);
        //删除客户护理项目
        LambdaUpdateWrapper<Customernurseitem> luw2 = new LambdaUpdateWrapper<>();
-       luw2.eq(Customernurseitem::getCustormerId, custormerId)
+       luw2.eq(Customernurseitem::getCustomerId, custormerId)
                .eq(Customernurseitem::getLevelId, levelId);
        int count2 = customernurseitemMapper.delete(luw2);
        if(!(count1>0 && count2>0)){

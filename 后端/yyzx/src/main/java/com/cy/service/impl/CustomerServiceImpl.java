@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 // 在调用方法的类顶部添加
 import com.cy.vo.KhxxCustomerVo;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * <p>
  *  服务实现类
@@ -33,6 +35,7 @@ import com.cy.vo.KhxxCustomerVo;
  * @since 2025-06-24
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> implements ICustomerService {
     @Autowired
     private CustomerMapper customerMapper;

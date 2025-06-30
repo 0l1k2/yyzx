@@ -65,7 +65,7 @@ public class CustomerNurseItemVo {
      * 服务购买日期
      */
     @Schema(description = "服务购买日期")
-    private LocalDate buyTime;
+    private Date buyTime;
 
     /**
      * 服务到期日
@@ -77,7 +77,7 @@ public class CustomerNurseItemVo {
     private String customerName;
 
     @Schema(description = "编号")
-    private Integer serialNumber;
+    private String serialNumber;
 
     @Schema(description = "护理项目名称")
     private String nursingName;

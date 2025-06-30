@@ -11,7 +11,8 @@
             nr.nursing_content,
             nr.nursing_count,
             nr.user_id,
-            u.nick_name,
+--             u.nick_name,
+            u.nickname,
             u.phone_number,
             nc.serial_number,
             nc.nursing_name
@@ -19,7 +20,7 @@
         where nr.user_id=u.id
         and nr.item_id=nc.id
         and nr.is_deleted=0
-        and nr.customer_id=#{customerId};
+        and nr.customer_id=#{customerId}
         limit #{currentPage},#{pageSize}
 
     </select>
@@ -30,6 +31,6 @@
         where nr.user_id=u.id
           and nr.item_id=nc.id
           and nr.is_deleted=0
-          and nr.customer_id=#{customerId};
+          and nr.customer_id=#{customerId}
     </select>
 </mapper>

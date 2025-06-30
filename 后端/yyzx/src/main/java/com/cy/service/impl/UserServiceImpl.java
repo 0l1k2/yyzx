@@ -11,6 +11,7 @@ import com.cy.mapper.UserMapper;
 import com.cy.service.IRolemenuService;
 import com.cy.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cy.utils.Jwt;
 import com.cy.utils.ResultVo;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -18,6 +19,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.Date;
@@ -35,6 +37,7 @@ import static javafx.beans.binding.Bindings.select;
  * @since 2025-06-23
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Autowired
 //    private UserMapper userMapper;
@@ -45,6 +48,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private RolemenuMapper rolemenuMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private Jwt jwt;
+
     @Override
    public ResultVo login(User user){
        // 1. 根据用户名查询用户信息
@@ -73,18 +79,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                listmenuLqw.eq(Menu::getParentId,menu.getId());
                menu.setChildren(menuMapper.selectList(listmenuLqw));
            }
-           user.setMenuslist(menus);
-           HashMap<String,Object> map=new HashMap<>();
-           map.put("role_id",user1.getRoleId());
-           // 如果登录验证成功，则需要生成令牌token，并返回给前端
-            JwtBuilder builder= Jwts.builder();
-            String token=builder.setSubject(user.getUsername())//主题，就是token中携带的数据
-                    .setIssuedAt(new Date())//设置token创建时间
-                    .setId(user1.getId().toString())//设置用户的ID为tokenID,唯一标识
-                    .setClaims(map)//map中可以存放用户的角色权限信息
-                    .setExpiration(new Date(System.currentTimeMillis()+1000*60*60*24))//设置过期时间为24小时
-                    .signWith(SignatureAlgorithm.HS256,"cy123456")//设置加密算法和密钥
-                    .compact();
+           user1.setMenuslist(menus);
+           String token=jwt.createToken(user1.getUsername());//主题，就是token中携带的数据
             return ResultVo.ok(user1,token);
        }
        return ResultVo.fail("用户名或密码错误");
