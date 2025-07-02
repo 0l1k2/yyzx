@@ -1,43 +1,45 @@
 import axios from "axios";
-import  router  from "../router";
+import router from "../router";
 import qs from "qs";
-import {getSessionStorage} from "../utils/common.js";
+import { getSessionStorage } from "../utils/common";
 
 const instance = axios.create({
-    baseURL: "http://localhost/yyzx",
-}); 
+    baseURL: 'http://localhost/yyzx'
+});
 
 // 请求拦截器
-instance.interceptors.request.use(function(config){
-    //检查token是否存在
-    let tokeb=getSessionStorage("token");
-    if(tokeb){
-        //如果存在token,则将token添加到请求头中
-        config.headers['token']=tokeb;
+instance.interceptors.request.use(function (config) {
+    // 检查token
+    let token = getSessionStorage("token");
+    if (token) {
+        config.headers['token'] = token;
     }
-    //定义需要post的请求方式为application/json的api集
-    let jsonQueryParamsPath = ['/customernurseitem/addItemToCustomer']
-    //设置post请求参数为
-    if (config.method === 'post' && jsonQueryParamsPath.indexOf(config.url)) {
-       config.data=qs.stringify(config.data)
+    
+    // 定义需要使用application/json格式的API路径
+    let jsonApiPaths = ['/customernurseitem/addItemToCustomer'];
+    
+    // 对于POST请求，如果不在JSON API列表中，则使用x-www-form-urlencoded格式
+    if (config.method == 'post' && jsonApiPaths.includes(config.url) < 0) {
+        config.data = qs.stringify(config.data);
+        config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
     }
+    
     return config;
-}, function(error){
+}, function (error) {
+    // 请求错误处理
     return Promise.reject(error);
 });
 
-
 // 响应拦截器
-instance.interceptors.response.use(function(response){
-    //如果token过期或不存在，则跳转到登录页面
+instance.interceptors.response.use(function (response) {
+    // token出现异常，返回登录页面
     if (!response.data.flag && response.data.data == "token_error") {
-        // 清除token
         sessionStorage.removeItem("token");
-        // 跳转到登录页面
-        router.push({ path: '/login' });
+        router.push('/login');
     }
     return response.data;
-},function(error){return Promise.reject(error)}
-);
+}, function (error) {
+    return Promise.reject(error);
+});
 
 export default instance;
