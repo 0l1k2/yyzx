@@ -1,13 +1,18 @@
 import { defineStore } from "pinia";
-import { getSessionStorage,sessionStorage} from "@/utils/common.js";
+import { getSessionStorage,setSessionStorage} from "../utils/common.js";
 import { ref } from "vue";
 
 
 export const useUserStore = defineStore("user", {
+    // state: () => ({
+    //     tabs: [], // 存储选项卡
+    //     menus:getSessionStorage("user").menuList || [], // 存储菜单
+    // }),
     state: () => ({
-        tabs: [], // 存储选项卡
-        menus:getSessionStorage("user").menuList || [], // 存储菜单
-    }),
+    tabs: [],
+    menus: getSessionStorage("user")?.menuList || [],
+}),
+
     getters:{
         tabs: (state) => state.tabs, // 获取选项卡
        menus: (state) => state.menus, // 获取菜单
@@ -17,7 +22,7 @@ export const useUserStore = defineStore("user", {
         addMenus(param){
             this.menus=param;
             // 将菜单存储到 sessionStorage
-            sessionStorage('menuList',param)
+            setSessionStorage('menuList',param)
         },
         //根据索引删除tab
         delectTabByIndex(index) {

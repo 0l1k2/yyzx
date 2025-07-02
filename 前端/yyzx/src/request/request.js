@@ -1,7 +1,7 @@
 import axios from "axios";
-import { router } from "../router";
+import  router  from "../router";
 import qs from "qs";
-import {getSessionStorage} from "../utils/common";
+import {getSessionStorage} from "../utils/common.js";
 
 const instance = axios.create({
     baseURL: "http://localhost/yyzx",

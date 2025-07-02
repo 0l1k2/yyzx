@@ -1,34 +1,28 @@
-import { createRouter, createWebHistory } from "vue-router"
-// import music from "../views/music.vue"
-// import { Component } from "react"
+import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
     {
-        // 路由重定向
-         path: "/",
-         redirect: "/login"
+        path: "/",
+        redirect: "/login"
     },
     {
-         path: "/login",  
-         component: () => import("../views/Login.vue")
+        path: "/login",
+        name: "Login", // 添加路由名称（推荐）
+        component: () => import("../views/Login.vue")
     },
     {
-         path:"/:catchAll(.*)*",  // 匹配所有未定义的路由
-         component: () => import("../views/error/NotFound.vue")
+        path: "/:catchAll(.*)*",
+        name: "NotFound", // 添加路由名称
+        component: () => import("../views/error/NotFound.vue")
     },
-]
-
-// linkActiveClass:"active-link", // 设置激活链接的类名
-// linkExactActiveClass:"test" // 设置精确激活链接的类名
-
+];
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes
-})
+    history: createWebHistory(import.meta.env.BASE_URL), 
+    routes,
+    // 直接在此处设置链接类名更清晰
+    linkActiveClass: "active-link",
+    linkExactActiveClass: "test"
+});
 
-// 设置激活链接的类名
-router.options.linkActiveClass = "active-link"
-router.options.linkExactActiveClass = "test"
-
-export default router
+export default router; // 保持默认导出

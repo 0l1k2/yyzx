@@ -11,7 +11,7 @@ export function getCurDate(){
 
 //想sessionStorage中存储数据
 export function setSessionStorage(key, value) {
-    sessionStorage.setItem(key, JSON.stringify(value));
+   setSessionStorage.setItem(key, JSON.stringify(value));
 }
 
 //从sessionStorage中获取数据
