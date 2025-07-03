@@ -8,7 +8,7 @@
                              <div class="query-form">
                                 <el-form :inline="true">
                                     <el-form-item label="楼层">
-                                        <el-select v-model="form.floor" >
+                                        <el-select v-model="form.floor" @change="findShowBedVoList" >
                                         <el-option label="一楼" value="一楼" />
                                         <el-option label="二楼" value="二楼" />
                                         </el-select>
@@ -48,9 +48,42 @@
             <table border="1px" cellspacing="20px" style="border-collapse: collapse;width: 1200px;">
                 <tbody>
                     <tr class="cwsyt_thead">
-                        <td></td>
-                    </tr>
-                </tbody>
+                        <td v-for="(item,index) in listRoom" :key="item.roomNo" v-show="index<1">{{ item. roomNo}}</td>
+                        <td class="room_id" rowspan="2" style="background-color:#AEEEEE;">电梯厅</td>
+                        <td class="room_id" rowspan="2" colspan="2" style="background-color:#9AC0CD;">洗衣厅</td>
+                        <td class="room_id" rowspan="2" colspan="2" style="background-color:#4EEE94;">活动中心</td>
+                         <td v-for="(item,index) in listRoom" :key="item.roomNo" v-show="index>0&&index<4">{{ item. roomNo}}</td>
+                    <td class="room_id" rowspan="2" style="background-color:#CDAA7D;">走道</td>
+                    <td v-for="(item,index) in listRoom" :key="item.roomNo" v-show="index>=4 && index<6">{{ item. roomNo}}</td>
+                </tr>
+                <tr class="cwsyt_tbody">
+                     <td v-for="(item,index) in listRoom" :key="item.roomNo" v-show="index < 6">
+                        <a href="javascript:" v-for="bedItem in item.bedList" :key="bedItem.bedNo">
+                            <div>
+                                <img src="../../assets/bed/kx.png" v-if="bedItem.bedStatus==1" />
+                                <img src="../../assets/bed/yr.png" v-if="bedItem.bedStatus==2" />
+                                <img src="../../assets/bed/wc.png" v-if="bedItem.bedStatus==3" />
+                            </div>{{ bedItem.bedNo }}
+                        </a>
+                     </td>
+                </tr>
+        
+                <tr></tr>
+                <tr class="cwsyt_thead">
+                    <td v-for="(item,index) in listRoom" :key="item.roomNo" v-show="index>=6">{{ item. roomNo}}</td>
+                </tr>
+                 <tr class="cwsyt_tbody">
+                     <td v-for="(item,index) in listRoom" :key="item.roomNo" v-show="index >= 6">
+                        <a href="javascript:" v-for="bedItem in item.bedList" :key="bedItem.bedNo">
+                            <div>
+                                <img src="../../assets/bed/kx.png" v-if="bedItem.bedStatus==1" />
+                                <img src="../../assets/bed/yr.png" v-if="bedItem.bedStatus==2" />
+                                <img src="../../assets/bed/wc.png" v-if="bedItem.bedStatus==3" />
+                            </div>{{ bedItem.bedNo }}
+                        </a>
+                     </td>
+                </tr>
+             </tbody>
             </table>
         </div>
      </div>
@@ -87,7 +120,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.query-form .el-select {
+
+ .query-form .el-select {
     width: 218px;
 }
 

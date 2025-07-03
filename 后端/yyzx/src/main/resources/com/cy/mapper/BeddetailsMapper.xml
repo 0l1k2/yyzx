@@ -34,7 +34,7 @@
                 and c.customer_name like concat('%', #{customerName}, '%')
             </if>
             <if test="startDate!= null and endDate!= null">
-                and b.start_date between #{startDate} and #{endDate}
+                and b.start_date >= #{startDate} and #{endDate} >=b.start_date
             </if>
             and b.is_deleted = #{isDeleted}
         </where>

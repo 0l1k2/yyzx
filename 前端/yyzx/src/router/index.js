@@ -17,6 +17,10 @@ const routes = [
             {
                 path: "/bed/bedMap",
                 component: () => import("../views/bed/BedMap.vue"),
+            },
+            {
+                 path: "/bed/bedManage",
+                component: () => import("../views/bed/BedManage.vue"),
             }
         ]
     },
