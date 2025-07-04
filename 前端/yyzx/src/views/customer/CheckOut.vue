@@ -337,24 +337,77 @@ const handleRecordChange = (val) => {
 const loadBackdownRecords = (customerId = null) => {
     const params = {
         currentPage: pageRecord.value.currentPage,
-        pageSize: pageRecord.value.pageSize
+        pageSize: pageRecord.value.pageSize,
+        userId: roleId.value, // 必须传递用户ID
+        customerId: customerId // 可选：按客户ID筛选
     }
-    
+    console.log('加载退住记录，参数:', params);
     if (customerId) {
         params.customerId = customerId
     }
     
-    listBackdownRecord(params).then(res => {
-        if (res.flag && res.data) {
-            backdownList.value = res.data.records || []
-            pageRecord.value.total = res.data.total || 0
+    // listBackdownRecord(params).then(res => {
+    //       if (res.flag && res.data) {
+    //     // 去重处理（按id字段）
+    //     const uniqueRecords = res.data.records.reduce((arr, record) => {
+    //         if (!arr.some(item => item.id === record.id)) {
+    //             arr.push(record);
+    //         }
+    //         return arr;
+    //     }, []);
+        
+    //     backdownList.value = uniqueRecords;
+    //     pageRecord.value.total = uniqueRecords.length;
+    // } else {
+    //     if (res.flag && res.data) {
+    //         backdownList.value = res.data.records || []
+    //         pageRecord.value.total = res.data.total || 0
+    //     } else {
+    //         ElMessage.error(res.message || '查询退住记录失败')
+    //     }
+    // }).catch(error => {
+    //     console.error('查询退住记录失败', error)
+    //     ElMessage.error('查询退住记录失败')
+    // });
+  listBackdownRecord(params).then(res => {
+    console.log('退住记录API响应数据:', res); // 打印完整响应数据用于调试
+    
+    if (res.flag && res.data) {
+        // 1. 数据去重处理（按id字段）
+        const uniqueRecords = res.data.records.reduce((arr, record) => {
+            if (!arr.some(item => item.id === record.id)) {
+                arr.push(record);
+                return arr;
+            }
+            return arr;
+        }, []);
+        
+        // 2. 赋值去重后的数据
+        backdownList.value = uniqueRecords;
+        pageRecord.value.total = uniqueRecords.length;
+        
+        // 3. 显示数据加载结果提示
+        if (uniqueRecords.length > 0) {
+            console.log(`成功加载 ${uniqueRecords.length} 条退住记录`);
         } else {
-            ElMessage.error(res.message || '查询退住记录失败')
+            ElMessage.info('暂无退住记录数据');
         }
-    }).catch(error => {
-        console.error('查询退住记录失败', error)
-        ElMessage.error('查询退住记录失败')
-    })
+    } else {
+        // 处理API返回失败的情况
+        const errorMessage = res.message || '查询退住记录失败，请检查网络或稍后再试';
+        ElMessage.error(errorMessage);
+        backdownList.value = []; // 清空数据避免显示旧数据
+        pageRecord.value.total = 0;
+    }
+}).catch(error => {
+    console.error('退住记录API请求异常:', error); // 打印异常详情
+    
+    // 处理网络异常或接口错误
+    ElMessage.error('加载退住记录失败，请检查网络连接');
+    backdownList.value = [];
+    pageRecord.value.total = 0;
+});
+
 }
 
 // 客户表格序号计算
@@ -504,6 +557,7 @@ const cancelExamine = () => {
 // 组件挂载时加载数据
 onMounted(() => {
     query()
+    loadBackdownRecords();
 })
 </script>
 
