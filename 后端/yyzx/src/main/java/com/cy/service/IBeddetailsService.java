@@ -20,4 +20,6 @@ import java.util.List;
 public interface IBeddetailsService extends IService<Beddetails> {
 ResultVo selectBedDetailsVo(BeddetailsDto bedDetailsDto);
 ResultVo exchangeBed(ExchangeDto exchangeDto);
+
+ResultVo delBedDetails(Integer id);
 }

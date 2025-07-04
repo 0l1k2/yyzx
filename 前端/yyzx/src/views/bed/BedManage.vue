@@ -31,12 +31,14 @@
           </el-row>
         </div>
       </el-header>
+      <!-- *******************头部查询************************* -->
       <el-divider style="margin:0;"></el-divider>
       <el-main>
         <div>
+          <!-- *************正在使用，使用历史**************** -->
           <el-row class="mb-4">
-            <el-button :class="[{activeBtn:btnFlag}]" style="border:1px white solid;margin-left: 0px;">正在使用</el-button>
-            <el-button :class="[{activeBtn:!btnFlag}]" style="border:1px white solid;margin-left: 0px;">使用历史</el-button>
+            <el-button :class="[{activeBtn:btnFlag}]" style="border:1px white solid;margin-left: 0px;"@click="doing">正在使用</el-button>
+            <el-button :class="[{activeBtn:!btnFlag}]" style="border:1px white solid;margin-left: 0px;"@click="history">使用历史</el-button>
           </el-row>
         </div>
         <div>
@@ -54,16 +56,25 @@
             <el-table-column align="center" fixed="right" label="操作" width="220">
               <template #default="scope">
                 <el-button type="warning" link icon="Switch" v-if="btnFlag" size="small" @click="exchange(scope.row)">床位调换</el-button>
-                <el-button type="primary" link icon="Edit" v-if="btnFlag" size="small">修改</el-button>
-                <el-button type="danger"  icon="Delete" v-if="!btnFlag" size="small">删除</el-button>
+                <el-button type="primary" link icon="Edit" v-if="btnFlag" size="small"
+                @click="editMessage(scope.row)">修改</el-button>
+                <el-button type="danger"  icon="Delete" v-if="!btnFlag" size="small" @click="del(scope.row.id)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
         </div>
         <div style="margin-top: 15px;">
-          <el-pagination background layout="prev, pager, next" :total="page.total"
+          <!-- <el-pagination background layout="prev, pager, next" :total="page.total"
           v-model="page.currentPage" v-model:page-size="page.pageSize"
-          @current-change="handleCurrentChange"/>
+          @current-change="handleCurrentChange"/> -->
+        <el-pagination
+            background
+            layout="prev, pager, next"
+            :total="page.total"
+            :current-page="page.currentPage"
+            :page-size="page.pageSize"
+            @current-change="handleCurrentChange"/>
+
         </div>
       </el-main>
     </el-container>
@@ -73,8 +84,7 @@
       width="60%"
       :before-close="exchangeClose"
       align-center
-      draggable
-    >
+      draggable>
       <el-divider border-style="double" style="margin: 0;"></el-divider>
 
       <el-form
@@ -137,18 +147,32 @@
             style="width: 200px;"
           />
         </el-form-item> -->
-        <el-form-item label="新床号" prop="newBedId">
+        <!-- <el-form-item label="新床号" prop="newBedId">
   <el-select
     v-model="exchangeDate.exchangeForm.newBedId"
     placeholder="请选择床位"
-    style="width: 200px;"
-  >
+    style="width: 200px;">
     <el-option
       v-for="bed in exchangeDate.bedList"
       :key="bed.bedId" :label="bed.bedNo" :value="bed.bedId"
     />
   </el-select>
+</el-form-item> -->
+<el-form-item label="新床号:" prop="newBedId">
+  <el-select 
+    v-model="exchangeDate.exchangeForm.newBedId" 
+    placeholder="请选择床位"
+    style="width: 200px"
+  >
+    <el-option 
+      v-for="item in exchangeDate.bedList" 
+      :key="item.id" 
+      :label="item.bedNo"
+      :value="item.id"
+    ></el-option>
+  </el-select>
 </el-form-item>
+
 
         <el-form-item label="当前床位使用结束日期" prop="endDate">
           <el-input readonly v-model="exchangeDate.exchangeForm.endDate" />
@@ -164,20 +188,76 @@
         </span>
       </template>
     </el-dialog>
+
+
+
+    <!-- 修改对话框 -->
+      <el-dialog
+      v-model="edit.dialogVisible"
+      title="信息修改"
+      width="60%"
+      :before-close="editClose"
+      align-center
+      draggable>
+      <el-divider border-style="double" style="margin: 0;"></el-divider>
+      <el-form
+        :model="edit.bedDetailsForm"
+        :rules="rules"
+        label-position="right"
+        label-width="auto"
+        class="demo-form-inline"
+        :inline="true"
+        style="max-width:800px; margin: 20px auto;"
+        ref="editForm">
+        <el-form-item label="客户姓名" prop="customerName">
+          <el-input readonly v-model="edit.bedDetailsForm.customerName" />
+        </el-form-item>
+
+
+        <el-form-item label="性别" prop="customerSex">
+          <el-input
+            readonly
+            :value="edit.bedDetailsForm.customerSex == 0 ? '男' : '女'"
+          />
+        </el-form-item>
+           <el-form-item label="床位详情" prop="bedDetails">
+          <el-input readonly v-model="edit.bedDetailsForm.startDate" />
+        </el-form-item>
+
+        <el-form-item label="床位使用起始日期" prop="startDate">
+          <el-input readonly v-model="edit.bedDetailsForm.startDate" />
+        </el-form-item>
+
+        <el-form-item label="床位使用结束日期" prop="endDate">
+          <el-date-picker  v-model="edit.bedDetailsForm.endDate" style="width:200px;"
+          format="YYYY/MM/DD" value-format="YYYY-MM-DD" type="date" placehoder="选择日期"/>
+        </el-form-item>
+      </el-form>
+
+      <el-divider border-style="double" style="margin: 0;"></el-divider>
+
+      <template #footer>
+        <span class="dialog-footer" style="margin-top: 0px;">
+          <el-button type="primary" @click="editSave()">保 存</el-button>
+          <el-button  @click="editCancle">取 消</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
 import { listRoom } from '../../api/roomApi';
-import { listBeddetails } from '../../api/bedApi';
+import { listBeddetails,findBedByRoom,exchangeBed,updateDetailsStartDate, delBedDetails } from '../../api/bedApi';
 import { computed, nextTick, onMounted,ref } from 'vue';
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 let btnFlag = ref(true); //按钮状态
 let page =ref({
   total: 0,
   pageSize: 6,
   currentPage: 1,
-  pageCount: 0
+//   pageCount: 0
 })
 
 //查询房间列表
@@ -207,15 +287,33 @@ let queryParams = ref({
 })
 //查询床位详情信息-分页
 let bedDetailsList = ref([]);
+// const findbedDetailsList = () => {
+//   listBeddetails(queryParams.value).then(res => {
+//     console.log(res.data);
+//     bedDetailsList.value = res.data.records;
+//     page.value.total = res.data.total;
+//     page.value.pageCount = res.data.pages;
+//     page.value.currentPage = res.data.currentPage;
+//     page.value.pageSize = res.data.size;
+   
+//   })
+
+// }
 const findbedDetailsList = () => {
   listBeddetails(queryParams.value).then(res => {
-    // console.log(res.data);
     bedDetailsList.value = res.data.records;
     page.value.total = res.data.total;
-    page.value.pageCount = res.data.pages;
+    page.value.pageCount=res.data.pages;
     page.value.currentPage = res.data.currentPage;
     page.value.pageSize = res.data.size;
-  })
+
+    // 如果当前页大于最大页数，自动跳转到最后一页
+    if (res.data.currentPage > res.data.pages && res.data.pages > 0) {
+      page.value.currentPage = res.data.pages;
+      queryParams.value.currentPage = res.data.pages;
+      findbedDetailsList(); // 重新请求最后一页数据
+    }
+  });
 }
 
 //序号计算
@@ -235,7 +333,7 @@ const query=()=>{
     queryParams.value.startDate = "";
     queryParams.value.endDate = "";
   }
-  queryParams.currentPage = 1; //重置当前页为1
+  queryParams.value.currentPage = 1; //重置当前页为1
   //重载表格
   findbedDetailsList();
 }
@@ -308,15 +406,188 @@ const exchange = (row) =>{
     exchangeDate.value.exchangeForm.newRoomNo = ''; 
          
     exchangeDate.value.exchangeForm.oldBedId = row.bedId; 
-    exchangeDate.value.exchangeForm.newBedId = ""; 
+    exchangeDate.value.exchangeForm.newBedId = ""; })
   getRoomList();
-})}
+}
 
 //根据选择的房间号查询床位
 const getBed=()=>{
-
-    
+  console.log("当前房间号:", exchangeDate.value.exchangeForm.newRoomNo);
+    //清空床位下拉列表
+    exchangeDate.value.bedList=[];
+    exchangeDate.value.exchangeForm.newBedId="";
+    findBedByRoom({
+      bedStatus:1,roomNo: exchangeDate.value.exchangeForm.newRoomNo
+    }).then(res=>{
+      exchangeDate.value.bedList=res.data;
+    })
 }
+
+
+const exchangeSave=()=>{
+  console.log(JSON.stringify(exchangeDate.value.exchangeForm));
+  if(
+     exchangeDate.value.exchangeForm.newRoomNo!="" && exchangeDate.value.exchangeForm.newRoomNo!=null&&
+     exchangeDate.value.exchangeForm.newBedId !="" && exchangeDate.value.exchangeForm.newBedId!=null
+
+  ){
+    exchangeBed(exchangeDate.value.exchangeForm).then(res=>{
+      if(res.flag){
+         ElMessage({
+         message: res.message,
+         type: 'success',
+        })
+        exchangeClose();
+        findbedDetailsList();
+      }else{
+        ElMessage({
+         message: res.message,
+         type: 'error',
+        })
+      }
+    })
+  }else{
+     ElMessage({
+         message: "请选择新房间号和床位",
+         type: 'error',
+        })
+  }
+}
+//关闭床位调换对话框
+const exchangeClose=()=>{
+  exchangeDate.value.dialogFormVisible=false;
+  
+  resetForm("exchangeForm");
+}
+
+//表单引用
+const exchangeForm=ref(null);
+const editForm=ref(null);
+//重置表单
+// const resetForm=(formName)=>{
+//     if(formName.value){
+//       formName.value.resetFields();
+//     }
+// }
+
+//点击床位调换取消按钮
+const exchangeCancle=()=>{
+  exchangeClose();
+}
+
+//修改duihuak
+let edit=ref({
+  dialogVisible: false,
+  bedDetailsForm:{
+    id:"",
+    customerName:"",
+    customerSex:"",
+    bedDetails:"",
+    roomNo:"",
+    startDate:"",
+    endDate:""
+  }
+})
+let rules=ref({
+  endDate:[
+    {require: true,message:'请选择床位结束使用日期',trigger: 'change'}
+  ]
+})
+const editMessage=(row)=>{
+  edit.value.dialogVisible=true;
+  nextTick(()=>{
+    edit.value.bedDetailsForm.id=row.id;
+    edit.value.bedDetailsForm.customerName=row.customerName;
+    edit.value.bedDetailsForm.customerSex=row.customerSex;
+    edit.value.bedDetailsForm.bedDetails=row.bedDetails;
+    edit.value.bedDetailsForm.startDate=row.startDate;
+    edit.value.bedDetailsForm.endDate=row.endDate;
+    edit.value.bedDetailsForm.roomNo=row.roomNo
+  })
+}
+
+const editClose=()=>{
+  edit.value.dialogVisible=false;
+  //重置表单
+  resetForm("editForm");
+}
+const resetForm = (formName) => {
+  if (formName.value) {
+    formName.value.resetFields();
+  }
+};
+// 用法：resetForm(editForm)
+//点击对话框取消按钮
+const editCancle=()=>{
+  editClose();
+}
+const editSave = () => {
+  editForm.value.validate((valid) => {
+    if (valid) {
+      updateDetailsStartDate(edit.value.bedDetailsForm).then(res => {
+        if (res.flag) {
+          ElMessage({
+            message: res.message,
+            type: 'success',
+          });
+          editClose();
+          findbedDetailsList();
+        } else {
+          ElMessage({
+            message: res.message,
+            type: 'error',
+          });
+        }
+      });
+    }
+  });
+};
+
+//使用历史
+const history=()=>{
+  btnFlag.value=false;
+  queryParams.value.isDeleted=1;
+  queryParams.value.currentPage=1;//重置当前页为1
+  findbedDetailsList();
+}
+//删除
+const del=(id)=>{
+  ElMessageBox.confirm(
+    '此操作删除记录，是否删除?',
+    '提示',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  ).then(() => {
+    delBedDetails(id).then(res=>{
+      if(res.flag){
+        ElMessage({
+        type: 'success',
+        message: res.message,
+      })
+      //调用findBedDtails
+      findbedDetailsList();
+      }
+      else{
+        ElMessage({
+        type: 'error',
+        message: res.message,
+           })
+            console.log('删除失败:', res);
+      }
+    })   
+    })
+}
+//正在使用
+const doing=()=>{
+  btnFlag.value=true;
+  queryParams.value.isDeleted=0;
+  queryParams.value.currentPage=1;
+   findbedDetailsList();
+}
+
 
 onMounted(()=>{
   // getRoomList();

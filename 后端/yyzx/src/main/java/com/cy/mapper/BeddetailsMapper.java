@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.dto.BeddetailsDto;
 import com.cy.vo.BedDetailsVo;
 import com.cy.vo.CountVo;
+import org.apache.ibatis.annotations.Delete;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ import java.util.List;
 public interface BeddetailsMapper extends BaseMapper<Beddetails> {
      List<BedDetailsVo> selectBedDetailsVo(BeddetailsDto bedDetailsDto);
      CountVo selectCountVo(BeddetailsDto bedDetailsDto);
+     @Delete("delete from beddetails where id = #{id} and is_deleted = 0")
+    Integer delBedDetails(Integer id);
  }

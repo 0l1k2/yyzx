@@ -41,9 +41,10 @@ public class BeddetailsController {
         }
 
     @Operation(summary = "删除床位使用详细")
-    @GetMapping("/deleteBeddetails/{id}")
-    public ResultVo deleteBeddetails(@PathVariable Integer id) {
-        return beddetailsService.removeById(id)? ResultVo.ok("删除成功") : ResultVo.fail("删除失败");
+    @GetMapping("/delBeddetails/{id}")
+    public ResultVo delBeddetails(@PathVariable Integer id) {
+//        return beddetailsService.removeById(id)? ResultVo.ok("删除成功") : ResultVo.fail("删除失败");
+        return beddetailsService.delBedDetails(id);
         }
     @Operation(summary = "床位调换")
     @PostMapping("/exchangeBed")

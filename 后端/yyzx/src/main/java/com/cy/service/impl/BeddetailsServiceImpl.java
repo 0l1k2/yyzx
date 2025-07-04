@@ -61,17 +61,18 @@ public class BeddetailsServiceImpl extends ServiceImpl<BeddetailsMapper, Beddeta
     public ResultVo exchangeBed(ExchangeDto exchangeDto){
         //查询床位是否使用
 //        LambdaQueryWrapper<Bed> lqw=new LambdaQueryWrapper<>();
-        Bed bed=bedMapper.selectById(exchangeDto.getId());
+        Bed bed=bedMapper.selectById(exchangeDto.getNewBedId());
+        System.out.println("************");
+        System.out.println(exchangeDto);
         if(bed.getBedStatus()!=1){
             return ResultVo.fail("床位已被使用");
         }
         //修改客户旧床位详情信息 is_delete=1 床位使用结束时间为当前日期
         Beddetails beddetails=new Beddetails();
         beddetails.setId(exchangeDto.getId());
-        beddetails.setIsDeleted(1);
         beddetails.setEndDate(new Date());//结束时间为当前时间
-//        beddetailsMapper.updateById(beddetails);
         int count1=beddetailsMapper.updateById(beddetails);
+        int row=beddetailsMapper.deleteById(beddetails.getId());
         //3.添加新床位详情信息
         Beddetails newbeddetails=new Beddetails();
         newbeddetails.setCustomerId(exchangeDto.getCustomerId());
@@ -97,9 +98,14 @@ public class BeddetailsServiceImpl extends ServiceImpl<BeddetailsMapper, Beddeta
         customer.setRoomNo(exchangeDto.getNewRoomNo());
         customer.setBuildingNo(exchangeDto.getBuildingId());
         int count5=customerMapper.updateById(customer);
-        if (count1>0 && count2>0 && count3>0 && count4>0 && count5>0){
+        if (count1>0 && count2>0 && count3>0 && count4>0 && count5>0 && row>0){
             return ResultVo.ok("床位调换成功");
         }
         return ResultVo.fail("床位调换失败");
+    }
+    @Override
+   public ResultVo delBedDetails(Integer id){
+        beddetailsMapper.delBedDetails(id);
+        return ResultVo.ok("删除成功");
     }
 }

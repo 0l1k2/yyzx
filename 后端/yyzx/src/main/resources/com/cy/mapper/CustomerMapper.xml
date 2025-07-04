@@ -33,8 +33,11 @@
         left join bed b on c.bed_id = b.id
         left join user u on c.user_id = u.id
         <where>
-            <if test="manType != null and manType == 1 or manType == 2">
+            <if test="manType != null and manType == 1 ">
                 and (select count(1)from customernurse cni where cni.customer_id = c.id and cni.is_deleted = 0)=0
+            </if>
+            <if test="manType != null and manType == 2">
+                and (select count(1)from customernurse cni where cni.customer_id = c.id and cni.is_deleted = 0)>0
             </if>
             <if test="manType!= null and manType == 3">
                 and user_id =-1
