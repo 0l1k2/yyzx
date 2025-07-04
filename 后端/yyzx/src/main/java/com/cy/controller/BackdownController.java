@@ -56,7 +56,7 @@ public class BackdownController {
     }
 
     @Operation(summary = "撤回退住审批")
-    @GetMapping("/delBackdown")
+    @GetMapping("/delBackdown/{id}")
     public ResultVo delBackdown(Integer id){
         return backdownService.removeById(id)?ResultVo.ok("退住审批撤回成功"):ResultVo.fail("退住审批撤回失败");
     }

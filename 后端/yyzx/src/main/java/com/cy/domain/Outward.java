@@ -43,13 +43,13 @@ public class Outward implements Serializable {
      */
     @Schema (description = "逻辑删除标记（0：显示；1：隐藏）")
     @TableLogic
-    private Integer is_deleted;
+    private Integer isDeleted;
 
     /**
      * 客户ID
      */
     @Schema(description = "客户ID")
-    private Integer customer_id;
+    private Integer customerId;
 
     /**
      * 外出事由

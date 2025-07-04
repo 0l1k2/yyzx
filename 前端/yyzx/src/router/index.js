@@ -21,7 +21,20 @@ const routes = [
             {
                  path: "/bed/bedManage",
                 component: () => import("../views/bed/BedManage.vue"),
-            }
+            },
+             {
+                 path: "/customer/checkIn",
+                component: () => import("../views/customer/Checkin.vue"),
+            },
+            {
+                 path: "/customer/outRecords",
+                component: () => import("../views/customer/OutRecords.vue"),
+            },
+            {
+                 path: "/customer/checkOut",
+                component: () => import("../views/customer/CheckOut.vue"),
+            },
+
         ]
     },
     {

@@ -3,6 +3,7 @@ package com.cy.mapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cy.domain.Customer;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.cy.vo.CountVo;
 import com.cy.vo.KhxxCustomerVo;
 import org.apache.ibatis.annotations.Param;
 import com.cy.mapper.CustomerMapper;
@@ -23,6 +24,10 @@ public interface CustomerMapper extends BaseMapper<Customer> {
                                       @Param("customerName")String customerName,
                                       @Param("manType") Integer manType,
                                       @Param("userId") Integer userId);
+
+    CountVo selectCountVo(   @Param("customerName")String customerName,
+                             @Param("manType") Integer manType,
+                             @Param("userId") Integer userId);
 
 
 }

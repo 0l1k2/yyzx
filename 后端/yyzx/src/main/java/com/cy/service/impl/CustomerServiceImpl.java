@@ -13,6 +13,7 @@ import com.cy.mapper.CustomerMapper;
 import com.cy.service.ICustomerService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cy.utils.ResultVo;
+import com.cy.vo.CountVo;
 import com.cy.vo.KhxxCustomerVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,14 +44,22 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     private BedMapper   bedMapper;
     @Autowired
     private BeddetailsMapper beddetailsMapper;
+
    public ResultVo KhxxFindCustomer(KhxxDto khxxDto){
-        List<KhxxCustomerVo> khxxCustomerVos = customerMapper.selectPageVo((khxxDto.getCurrentPage()-1)*khxxDto.getPageSize(), khxxDto.getPageSize(), khxxDto.getCustomerName(), khxxDto.getManType(), khxxDto.getUserId());
+        List<KhxxCustomerVo> khxxCustomerVos = customerMapper.selectPageVo((khxxDto.getCurrentPage()-1)*khxxDto.getPageSize(),
+                khxxDto.getPageSize(),
+                khxxDto.getCustomerName(),
+                khxxDto.getManType(),
+                khxxDto.getUserId());
+       CountVo countVo=customerMapper.selectCountVo(khxxDto.getCustomerName(),
+                khxxDto.getManType(),
+                khxxDto.getUserId());
         Map<String,Object> map=new HashMap<>();
-        map.put("total",khxxCustomerVos.size());
+        map.put("total",countVo.getCount());
         map.put("records",khxxCustomerVos);
         map.put("size",khxxDto.getPageSize());
         map.put("current",khxxDto.getCurrentPage());
-        map.put("pages",Math.ceil((double)khxxCustomerVos.size()/khxxDto.getPageSize()));
+        map.put("pages",Math.ceil((double)countVo.getCount()/khxxDto.getPageSize()));
         return ResultVo.ok(map);
    }
 
