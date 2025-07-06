@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-
 @RestController
 @RequestMapping("/customernurseitem")
 @Tag(name="服务关注管理")
@@ -62,6 +60,7 @@ public class CustomernurseitemController {
     @Operation(summary="获取客户护理项目列表-分页")
     @PostMapping("/listCustomerItem")
     public ResultVo listCustomerItem(@RequestBody CustomerNurseItemDto customernurseitemDto) {
+        System.out.println("接收参数：" + customernurseitemDto.toString());
         return customernurseitemService.listCustomerItem(customernurseitemDto);
     }
 

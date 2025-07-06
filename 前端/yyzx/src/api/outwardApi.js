@@ -6,7 +6,7 @@ export const addOutwardRecord=(params)=>{
     return http.post(`/outward/addOutward`,params)
 }
 
-// 查询外出审批
+// //根据用户id查询对应的客户信息
 export const listOutwardRecord=(params)=>{
     return http.post(`/outward/selectOutwardVo`,params)
 }
@@ -15,7 +15,7 @@ export const listOutwardRecord=(params)=>{
 
 //撤回外出审批
 export const deleteOutwardRecord=(id)=>{
-     return http.get(`/outward/delOutward${id}`)
+     return http.get(`/outward/delOutward/${id}`)
 }
 
 //外出审批
@@ -28,3 +28,8 @@ export const auditOutwardRecord=(params)=>{
 export const updateOutwardRecord=(params)=>{
     return http.post('/outward/updateBackTime',params)
 }
+
+//根据用户id查询对应的客户信息
+// export const queryOutwardVo=(params)=>{
+//     return http.post('/outward/selectOutwardVo',params)
+// }

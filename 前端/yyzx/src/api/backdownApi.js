@@ -14,7 +14,7 @@ export const addBackdownRecord=(params)=>{
 
 //撤回退住申请
 export const deleteBackdownRecord=(id)=>{
-    return http.post(`backdown/delBackdown${id}`)
+    return http.get(`backdown/delBackdown${id}`)
 }
 
 //审批退住申请

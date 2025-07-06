@@ -283,7 +283,7 @@
     </div>
 </template>
 
-
+<!-- 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -548,8 +548,338 @@ onMounted(() => {
     query()
     loadOutwardRecords()
 })
-</script>
+</script> -->
+<script setup>
+import { ref, onMounted } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
+import { selectCustomer } from '../../api/customerApi';
+import { listOutwardRecord, addOutwardRecord, updateOutwardRecord, deleteOutwardRecord, auditOutwardRecord } from '../../api/outwardApi';
 
+// 查询条件（客户列表）
+const condition = ref({
+  customerName: '',
+  currentPage: 1,
+  pageSize: 6
+});
+
+// 客户信息分页
+const page = ref({
+  currentPage: 1,
+  pageSize: 6,
+  total: 0
+});
+
+// 外出记录分页
+const pageRecord = ref({
+  currentPage: 1,
+  pageSize: 6,
+  total: 0
+});
+
+
+// 角色ID
+const roleId = ref(2);
+
+// 对话框状态
+const dialog = ref({
+  dialogVisible: false,
+  dialogTimeVisible: false,
+  dialogExamineVisible: false,
+  tops: '',
+  item: {
+    id: null,
+    customerId: null,
+    outgoingreason: '',
+    outgoingtime: '',
+    expectedreturntime: '',
+    escorted: '',
+    escortedtel: '',
+    actualreturntime: '',
+    auditstatus: 0
+  }
+});
+
+// 表单校验规则
+const rules = ref({
+  customerId: [{ required: true, message: '请选择客户', trigger: 'change' }],
+  outgoingreason: [{ required: true, message: '请输入外出事由', trigger: 'blur' }],
+  outgoingtime: [{ required: true, message: '请选择外出时间', trigger: 'change' }],
+  expectedreturntime: [{ required: true, message: '请选择预计回院时间', trigger: 'change' }],
+  escorted: [{ required: true, message: '请输入陪同人', trigger: 'blur' }],
+  escortedtel: [{ 
+    required: true, 
+    message: '请输入陪同人电话', 
+    trigger: 'blur', 
+    pattern: /^1[3-9]\d{9}$/, 
+    message: '请输入正确的手机号码' 
+  }],
+  actualreturntime: [{ required: true, message: '请选择实际回院时间', trigger: 'change' }],
+  auditstatus: [{ required: true, message: '请选择审批状态', trigger: 'change' }]
+});
+const khxxList = ref([]);
+const outwardList = ref([]);
+const customerList = ref([]);
+
+// 查询客户信息
+const query = () => {
+  // 确保页码合法（≥1）
+  condition.value.currentPage = Math.max(1, condition.value.currentPage);
+  
+  const params = {
+    customerName: condition.value.customerName,
+    currentPage: condition.value.currentPage, // 直接传递前端页码（假设后端1-based）
+    pageSize: condition.value.pageSize
+  };
+  
+  selectCustomer(params).then(res => {
+    if (res.flag && res.data) {
+      khxxList.value = res.data.records || []; // 客户数据赋值
+      // 同步分页信息（从后端响应提取）
+      page.value = {
+        total: res.data.total || 0,
+        currentPage: condition.value.currentPage,
+        pageSize: res.data.pageSize || condition.value.pageSize
+      };
+      // 构建客户下拉列表（用于添加外出申请）
+      customerList.value = khxxList.value.map(item => ({ 
+        id: item.id, 
+        customerName: item.customerName 
+      }));
+    } else {
+      ElMessage.error(res.message || '查询失败');
+    }
+  }).catch(error => {
+    console.error('客户查询失败:', error);
+    ElMessage.error('查询失败');
+  });
+};
+// 重置查询条件
+const resetQuery = () => {
+  condition.value.customerName = '';
+  condition.value.currentPage = 1;
+  query();
+};
+
+// 客户信息分页切换
+const handleCurrentChange = (val) => {
+  condition.value.currentPage = Math.max(1, val);
+  query();
+};
+
+// 外出记录分页切换
+const handleRecordChange = (val) => {
+  pageRecord.value.currentPage = val;
+  loadOutwardRecords();
+};
+
+// 加载外出记录（关键修改：计算正确的偏移量）
+// const loadOutwardRecords = (customerId = null) => {
+//   // 计算正确的偏移量：(当前页码 - 1) * 每页大小
+//   const offset = (pageRecord.value.currentPage - 1) * pageRecord.value.pageSize;
+  
+//   const params = {
+//     currentPage: pageRecord.value.currentPage - 1,
+//     pageSize: pageRecord.value.pageSize,
+//     customerId: customerId
+//   };
+  
+//   console.log('外出记录请求参数:', params);
+//   listOutwardRecord(params).then(res => {
+//     console.log('外出记录响应:', res);
+//     if (res.flag && res.data) {
+//       outwardList.value = res.data.records || [];
+//       pageRecord.value.total = res.data.total || 0;
+//     } else {
+//       ElMessage.error(res.message || '查询外出记录失败');
+//     }
+//   }).catch(error => {
+//     console.error('查询外出记录失败:', error);
+//     ElMessage.error('查询失败');
+//   });
+// };
+// 加载外出记录
+const loadOutwardRecords = (customerId = null) => {
+  // 确保页码合法（≥1）
+  pageRecord.value.currentPage = Math.max(1, pageRecord.value.currentPage);
+  
+  const params = {
+    currentPage: pageRecord.value.currentPage, // 直接传递前端页码
+    pageSize: pageRecord.value.pageSize,
+    customerId: customerId
+  };
+  
+  console.log('外出记录请求参数:', params); // 调试日志
+  listOutwardRecord(params).then(res => {
+    console.log('外出记录响应:', res); // 调试日志
+    
+    if (res.flag && res.data) {
+      // 映射后端字段到前端期望格式
+      outwardList.value = (res.data.records || []).map(item => ({
+        id: item.id,
+        customerName: item.customerName, // 确保后端返回该字段，否则需通过customerId关联
+        outgoingreason: item.outgoingreason,
+        outgoingtime: item.outgoingtime,
+        expectedreturntime: item.expectedreturntime,
+        actualreturntime: item.actualreturntime,
+        escorted: item.escorted,
+        relation: item.relation,
+        escortedtel: item.escortedtel,
+        auditstatus: item.auditstatus // 审批状态：0-已提交，1-同意，2-拒绝
+      }));
+      
+      pageRecord.value = {
+        total: res.data.total || 0,
+        currentPage: pageRecord.value.currentPage,
+        pageSize: res.data.pageSize || pageRecord.value.pageSize
+      };
+    } else {
+      outwardList.value = []; // 清空列表
+      ElMessage.error(res.message || '查询外出记录失败');
+    }
+  }).catch(error => {
+    console.error('查询外出记录失败:', error);
+    outwardList.value = []; // 清空列表
+    ElMessage.error('查询失败');
+  });
+};
+
+// 表格序号计算
+const indexMethod = (index) => (page.value.currentPage - 1) * page.value.pageSize + index + 1;
+const indexMethodRecord = (index) => (pageRecord.value.currentPage - 1) * pageRecord.value.pageSize + index + 1;
+
+// 选择客户并查询其外出记录
+const handleChangeCustomer = (row) => {
+  if (row && row.id) {
+    pageRecord.value.currentPage = 1;
+    loadOutwardRecords(row.id);
+  }
+};
+
+// 添加外出申请
+const addItem = () => {
+  dialog.value.tops = '添加外出申请';
+  dialog.value.dialogVisible = true;
+  dialog.value.item = {
+    auditstatus: 0,
+    outgoingtime: new Date().toISOString().split('T')[0],
+    expectedreturntime: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0],
+    customerId: null
+  };
+};
+
+// 保存外出申请
+const save = (formName) => {
+  addOutwardRecord(dialog.value.item)
+    .then(res => {
+      if (res.flag) {
+        ElMessage.success('保存成功');
+        dialog.value.dialogVisible = false;
+        loadOutwardRecords();
+      } else {
+        ElMessage.error(res.message || '保存失败');
+      }
+    })
+    .catch(error => {
+      console.error('保存失败:', error);
+      ElMessage.error('保存失败');
+    });
+};
+
+// 撤销申请
+const del = (id) => {
+  ElMessageBox.confirm('确定撤销？此操作不可恢复', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+  .then(() => {
+    deleteOutwardRecord(id)
+      .then(res => {
+        if (res.flag) {
+          ElMessage.success('撤销成功');
+          loadOutwardRecords();
+        } else {
+          ElMessage.error(res.message || '撤销失败');
+        }
+      })
+      .catch(error => {
+        console.error('撤销失败:', error);
+        ElMessage.error('撤销失败');
+      });
+  })
+  .catch(error => {
+    if (error !== 'cancel') ElMessage.error('撤销失败');
+  });
+};
+
+// 审批外出申请
+const examine = (id) => {
+  dialog.value.tops = '审批外出申请';
+  dialog.value.dialogExamineVisible = true;
+  dialog.value.item = { id, auditstatus: 1 };
+};
+
+// 审批保存
+const examineOutward = () => {
+  auditOutwardRecord(dialog.value.item)
+    .then(res => {
+      if (res.flag) {
+        ElMessage.success('审批完成');
+        dialog.value.dialogExamineVisible = false;
+        loadOutwardRecords();
+      } else {
+        ElMessage.error(res.message || '审批失败');
+      }
+    })
+    .catch(error => {
+      console.error('审批失败:', error);
+      ElMessage.error('审批失败');
+    });
+};
+
+// 登记回院时间
+const updateTime = (id) => {
+  dialog.value.tops = '登记回院时间';
+  dialog.value.dialogTimeVisible = true;
+  dialog.value.item = { 
+    id, 
+    actualreturntime: new Date().toISOString().split('T')[0] 
+  };
+};
+
+// 保存回院时间
+const updateBackTime = (formName) => {
+  updateOutwardRecord(dialog.value.item)
+    .then(res => {
+      if (res.flag) {
+        ElMessage.success('更新成功');
+        dialog.value.dialogTimeVisible = false;
+        loadOutwardRecords();
+      } else {
+        ElMessage.error(res.message || '更新失败');
+      }
+    })
+    .catch(error => {
+      console.error('更新失败:', error);
+      ElMessage.error('更新失败');
+    });
+};
+
+// 关闭对话框
+const handleClose = () => dialog.value.dialogVisible = false;
+const handleTimeClose = () => dialog.value.dialogTimeVisible = false;
+const handleExamineClose = () => dialog.value.dialogExamineVisible = false;
+const cancel = () => dialog.value.dialogVisible = false;
+const cancelTime = () => dialog.value.dialogTimeVisible = false;
+const cancelExamine = () => dialog.value.dialogExamineVisible = false;
+
+// 组件挂载时加载数据
+onMounted(() => {
+  query();
+  loadOutwardRecords();
+});
+</script>
 
 
 

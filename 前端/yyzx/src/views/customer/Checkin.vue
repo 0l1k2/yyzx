@@ -138,7 +138,7 @@
                     </el-form-item>
                     <el-form-item label="合同到期时间： " prop="expirationDate">
                         <el-date-picker style="width:200px" v-model="djDialog.customerForm.expirationDate" type="date"
-                            format="YYYY/MM/DD" value-format="YYYY-MM-DD" :disabled-date="disabledDate0"
+                            format="YYYY/MM/DD" value-format="YYYY-MM-DD" :disabled-date="disabledDate"
                             placeholder="选择日期"></el-date-picker>
                     </el-form-item>
                     <el-form-item label="血型：" prop="bloodType">
@@ -157,9 +157,9 @@
                 <el-divider border-style="double" style="margin:0;" />
                 <template #footer>
                     <span class="dialog-footer" style="padding-top: 0px">
-                        <el-button type="primary" @click="djsave('customerForm')">保存</el-button>
+                        <el-button type="primary" @click="djsave()">保存</el-button>
                         <el-button v-if="!djDialog.customerForm.id" type="primary"
-                            @click="resetForm('customerForm')">重置</el-button>
+                            @click="resetForm()">重置</el-button>
                         <el-button @click="djcancel">取消</el-button>
                     </span>
                 </template>
@@ -179,17 +179,14 @@ import {
     selectCustomer, addCustomer, editCustomer, delCustomer
 } from '../../api/customerApi';
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 import { listRoom } from '../../api/roomApi';
 import { findBedByRoom } from '../../api/bedApi';
-import { id } from 'element-plus/es/locales.mjs';
 
-
-//编辑和新增使用同一个对话框。isshow用来判别展示不同的标签
 let isShow = ref(false)
 
 // 查询条件
-let condition = ref({
+let condition = reactive({
     customerName: "",
     currentPage: 1,
     pageSize: 6,
@@ -197,38 +194,41 @@ let condition = ref({
 })
 
 // 分页信息
-let page = ref({
+let page = reactive({
     currentPage: 1,
     pageSize: 6,
     total: 0,
     pageCount: 0
 })
+
+// 获取客户列表
+const getKhxxList = () => {
+    selectCustomer(condition).then(res => {
+        khxxList.value = res.data.records
+        page.total = res.data.total;
+        page.pageCount = res.data.pages;
+        page.currentPage = res.data.current;
+        page.pageSize = res.data.size;
+    })
+}
+
 // 查询客户信息
 const query = () => {
-    condition.value.currentPage = 1;
-    //入住登记，客户信息列表（分页）
-    //************************* */
+    condition.currentPage = 1;
     getKhxxList();
 }
 
-
 const dj = () => {
-    isShow.value = true
-    //查询房间列表
+    isShow.value = false
     getRoomList()
-    djDialog.value.dialogVisible = true
-    djDialog.value.tops = "入住登记"
-
+    djDialog.tops = "入住登记"
+    djDialog.dialogVisible = true
+    // 重置表单
+    resetForm()
 }
 
-
-//点击登录按钮
-
-
-// 按钮激活状态,点击每个按钮改一下状态
+// 按钮激活状态
 let btnFlag = ref(true)
-// let btnFlag3=ref(false)
-
 
 //客户信息列表
 let khxxList = ref([])
@@ -236,7 +236,7 @@ let khxxList = ref([])
 // 删除客户
 const del = (row) => {
     ElMessageBox.confirm(
-        '此操作删除记录，是否删除?',
+        '此操作将逻辑删除记录，是否确认?',
         '提示',
         {
             confirmButtonText: '确定',
@@ -244,52 +244,41 @@ const del = (row) => {
             type: 'warning',
         }
     ).then(() => {
-        delBedDetails({ id: row.id, bedId: row.bedId }).then(res => {
+        delCustomer(row.id, row.bedId).then(res => {
             if (res.flag) {
-                ElMessage({
-                    type: 'success',
-                    message: res.message,
-                })
-                //调用findBedDtails
+                ElMessage.success(res.message);
                 getKhxxList();
+            } else {
+                ElMessage.error(res.message);
             }
-            else {
-                ElMessage({
-                    type: 'error',
-                    message: res.message,
-                })
-            }
-        })
+        }).catch(error => {
+            console.error('删除请求失败:', error);
+            ElMessage.error('网络请求失败，请稍后重试');
+        });
     })
 }
 
-//查询房间列表
+// 查询房间列表
 const getRoomList = () => {
     listRoom().then(res => {
-        //构建房间列表数据
-        let floor1 = res.data.filter((item, i, arr) => {
-            return item.roomFloor == "一楼"
-        })
-        let floor2 = res.data.filter((item, i, arr) => {
-            return item.roomFloor == "二楼"
-        })
-        djDialog.value.roomList = [
+        let floor1 = res.data.filter(item => item.roomFloor == "一楼")
+        let floor2 = res.data.filter(item => item.roomFloor == "二楼")
+        djDialog.roomList = [
             { label: "一楼", options: floor1 },
             { label: "二楼", options: floor2 }
         ]
     })
 }
-//根据选择的房间号查询床位
+
+// 根据选择的房间号查询床位
 const getBed = () => {
-    //清空床位下拉列表
-    djDialog.value.bedList = [];
-    djDialog.value.customerForm.newBedId = "";
+    djDialog.bedList = [];
+    djDialog.customerForm.bedId = "";
     findBedByRoom({
-        bedStatus: 1, 
-        // roomNo: djDialog.value.djDialog.newRoomNo
-        roomNo: djDialog.value.customerForm.roomNo
+        bedStatus: 1,
+        roomNo: djDialog.customerForm.roomNo
     }).then(res => {
-        djDialog.value.bedList = res.data;
+        djDialog.bedList = res.data;
     })
 }
 
@@ -298,12 +287,35 @@ const edit = (row) => {
     djDialog.dialogVisible = true
     djDialog.tops = '修改客户信息'
     isShow.value = true
-    Object.assign(djDialog.customerForm, row)
-    
+    nextTick(() => {
+        // 使用对象解构赋值
+        Object.assign(djDialog.customerForm, {
+            id: row.id,
+            bedId: row.bedId,
+            birthday: row.birthday,
+            bloodType: row.bloodType,
+            buildingNo: row.buildingNo,
+            contactTel: row.contactTel,
+            customerAge: row.customerAge,
+            customerSex: row.customerSex,
+            customerName: row.customerName,
+            roomNo: row.roomNo,
+            idcard: row.idcard,
+            psychosomaticState: row.psychosomaticState,
+            familyMember: row.familyMember,
+            filepath: row.filepath,
+            checkinDate: row.checkinDate,
+            expirationDate: row.expirationDate
+        })
+        // 自动计算年龄
+        if (row.birthday) {
+            getAge(row.birthday);
+        }
+    })
 }
 
 // 入住登记对话框/信息编辑对话框模态框数据
-let djDialog = ref({
+let djDialog = reactive({
     dialogVisible: false,
     tops: '入住登记',
     customerForm: {
@@ -320,26 +332,20 @@ let djDialog = ref({
         psychosomaticState: "",
         familyMember: "",
         filepath: "../../assets/tou.png",
-        birthDate: "",
+        birthday: "",
         checkinDate: "",
         expirationDate: ""
     },
     roomList: [],
     bedList: [],
     sex: [
-        {
-            value: 0,
-            label: "男"
-        },
-        {
-            value: 1,
-            label: "女"
-        }
+        { value: 0, label: "男" },
+        { value: 1, label: "女" }
     ]
 })
 
 // 表单校验规则
-let rules = ref([{
+const rules = reactive({
     bedId: [{ required: true, message: "选择床位", trigger: "change" }],
     bloodType: [{ required: true, message: "请输入血型", trigger: "blur" }],
     contactTel: [{ required: true, message: "请输入手机号", trigger: "blur" }],
@@ -348,108 +354,118 @@ let rules = ref([{
     roomNo: [{ required: true, message: "请选择房间号", trigger: "change" }],
     idcard: [{ required: true, message: "请输入身份证号", trigger: "blur" }],
     familyMember: [{ required: true, message: "请输入家属", trigger: "blur" }],
-    checkinDate: [{
-        type: "date",
-        required: true,
-        message: "请选择时间",
-        trigger: "change"
-    }
-    ], expirationDate: [{
-        type: "date",
-        required: true,
-        message: "请选择时间",
-        trigger: "change"
-    }
-    ]
-}
-])
+    checkinDate: [{ type: "date", required: true, message: "请选择时间", trigger: "change" }],
+    expirationDate: [{ type: "date", required: true, message: "请选择时间", trigger: "change" }]
+})
 
-//保存按钮
-// 保存客户信息
-const djsave = (formName) => {
-    customerForm.value.validate(async (valid) => {
-        if (!valid) return
+// 表单引用
+const customerForm = ref(null)
 
-        try {
-            // 判断是新增还是修改
-            if (djDialog.customerForm.id) {
-                await editCustomer(djDialog.customerForm)
-            } else {
-                await addCustomer(djDialog.customerForm)
-            }
-
-            ElMessage.success('保存成功')
-            djDialog.dialogVisible = false
-            query()
-        } catch (error) {
-            ElMessage.error('保存失败：' + error.message)
+// 保存按钮
+const djsave = () => {
+    
+    customerForm.value.validate((valid) => {
+        if (valid) {
+            const form = djDialog.customerForm;
+             console.log('保存参数:', form)
+            const apiCall = form.id ? editCustomer : addCustomer;
+            
+            apiCall(form).then(res => {
+                if (res.flag) {
+                    ElMessage.success(res.message);
+                    getKhxxList();
+                    djcancel();
+                } else {
+                    ElMessage.error(res.message);
+                }
+            }).catch(error => {
+                console.error('保存失败:', error);
+                ElMessage.error('操作失败，请重试');
+            });
         }
     })
 }
+
 // 重置表单
-const customerForm = ref(null)
-const resetForm = (formRef) => {
-    if (formRef.value) {
-        formRef.value.resetFields();
+const resetForm = () => {
+    if (customerForm.value) {
+        customerForm.value.resetFields();
     }
-};
+    Object.assign(djDialog.customerForm, {
+        id: "",
+        bedId: "",
+        bloodType: "",
+        buildingNo: "606",
+        contactTel: "",
+        customerAge: "",
+        customerName: "",
+        customerSex: 0,
+        roomNo: "",
+        idcard: "",
+        psychosomaticState: "",
+        familyMember: "",
+        filepath: "../../assets/tou.png",
+        birthday: "",
+        checkinDate: "",
+        expirationDate: ""
+    });
+}
 
-
-// 取消按钮操作
 const djcancel = () => {
     djDialog.dialogVisible = false
-    //重置表单
-    resetForm("customerForm")
-    //将id初始化
-    djDialog.customerForm.id = ""
+    resetForm()
 }
 
 //自理老人
 const selfCareMan = () => {
-    btnFlag.value = true,
-        condition.value.manType = "1",
-        condition.pageSize = 1
-    //重新渲染表格数据
-     getKhxxList()
-
+    btnFlag.value = true;
+    condition.manType = "1";
+    condition.currentPage = 1;
+    getKhxxList();
 }
+
 //护理老人
 const careMan = () => {
-    btnFlag.value = false,
-        condition.value.manType = "2",
-        condition.pageSize = 1
-    //重新渲染表格数据
-     getKhxxList()
-
+    btnFlag.value = false;
+    condition.manType = "2";
+    condition.currentPage = 1;
+    getKhxxList();
 }
+
 const handleCurrentChange = (current) => {
-    condition.value.currentPage = current
-    getKhxxList()
-}
-const getKhxxList = () => {
-    selectCustomer(condition.value).then(res => {
-        khxxList.value = res.data.records
-        page.value.total = res.data.total;
-        page.value.pageCount = res.data.pages;
-        page.value.currentPage = res.data.current;
-        page.value.pageSize = res.data.size;
-    })
+    condition.currentPage = current;
+    getKhxxList();
 }
 
-//序号计算
-const indexMethod = computed(() => {
-    console.log("************");
-    console.log(page.value.currentPage + "ewq");
-    
-    return page.value.currentPage * page.value.pageSize - page.value.pageSize + 1;
-})
+// 计算年龄
+const getAge = (birthDate) => {
+    if (birthDate) {
+        const birth = new Date(birthDate);
+        const today = new Date();
+        let age = today.getFullYear() - birth.getFullYear();
+        const monthDiff = today.getMonth() - birth.getMonth();
+        
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+            age--;
+        }
+        
+        djDialog.customerForm.customerAge = age;
+    }
+}
 
+// 序号计算方法
+const indexMethod = (index) => {
+    return (page.currentPage - 1) * page.pageSize + index + 1;
+}
 
+// 时间限制
+const disabledDate = (time) => {
+    return time.getTime() < Date.now() - 8.64e7; // 禁用今天之前的日期
+}
 
 // 组件挂载时加载数据
 onMounted(() => {
     getKhxxList()
-    query() 
 })
 </script>
 

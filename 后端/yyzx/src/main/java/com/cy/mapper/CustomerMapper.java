@@ -19,7 +19,8 @@ import java.util.List;
  * @since 2025-06-24
  */
 public interface CustomerMapper extends BaseMapper<Customer> {
-    List<KhxxCustomerVo> selectPageVo(@Param("currentPage") Integer currentPage,
+    List<KhxxCustomerVo> selectPageVo(
+                                      @Param("offset") Integer offset,
                                       @Param("pageSize") Integer pageSize,
                                       @Param("customerName")String customerName,
                                       @Param("manType") Integer manType,

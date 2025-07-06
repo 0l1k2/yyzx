@@ -11,6 +11,7 @@ import com.cy.utils.ResultVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -29,7 +30,7 @@ public class UserController {
     private IUserService userService;
 
     @PostMapping("/login")
-   @Operation(summary = "用户登录", description = "用户登录接口")
+    @Operation(summary = "用户登录", description = "用户登录接口")
     public ResultVo login(@RequestBody User user) {
         return userService.login(user);
     }
@@ -38,14 +39,39 @@ public class UserController {
     @Operation(summary = "查询系统用户-分页")
     @PostMapping("/findUserPage")
     public ResultVo findUserPage(@RequestBody UserDto userDto) {
-        Page<User> page = new Page<>(userDto.getCurrentPage(), userDto.getPageSize());
-        LambdaQueryWrapper<User> lqw=new LambdaQueryWrapper<>();
-        if(userDto.getNickName()!=null&& userDto.getNickName()!=("")){
-            lqw.like(User::getNickname,userDto.getNickName());//模糊查询
+//        Page<User> page = new Page<>(userDto.getCurrentPage(), userDto.getPageSize());
+//        LambdaQueryWrapper<User> lqw=new LambdaQueryWrapper<>();
+//        if(userDto.getNickName()!=null&& userDto.getNickName()!=("")){
+//            lqw.like(User::getNickname,userDto.getNickName());//模糊查询
+//        }
+//
+//        lqw.eq(User::getRoleId,userDto.getRoleId());
+//        userService.page(page,lqw);
+//        return ResultVo.ok(page);
+        // 检查userDto是否为null
+        if (userDto == null) {
+            return ResultVo.fail("参数不能为空");
         }
 
-        lqw.eq(User::getRoleId,userDto.getRoleId());
-        userService.page(page,lqw);
+        // 检查分页参数
+        if (userDto.getCurrentPage() == null || userDto.getPageSize() == null) {
+            return ResultVo.fail("分页参数不能为空");
+        }
+
+        Page<User> page = new Page<>(userDto.getCurrentPage(), userDto.getPageSize());
+        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
+
+        // 优化字符串判断
+        if (StringUtils.hasText(userDto.getNickName())) {
+            lqw.like(User::getNickname, userDto.getNickName());
+        }
+
+        // 检查roleId是否为null
+        if (userDto.getRoleId() != null) {
+            lqw.eq(User::getRoleId, userDto.getRoleId());
+        }
+
+        userService.page(page, lqw);
         return ResultVo.ok(page);
     }
     @Operation(summary = "查询所有用户-分页")

@@ -15,4 +15,6 @@ public class BackdownDto {
     private Integer pageSize;
     @Schema(description = "用户Id")
     private Integer userId;
+    @Schema(description = "客户Id") // 新增字段
+    private Integer customerId;
 }

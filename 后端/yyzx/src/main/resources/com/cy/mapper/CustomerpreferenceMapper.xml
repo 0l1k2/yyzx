@@ -14,9 +14,9 @@
       from customerpreference cp
           left join customer c on cp.customer_id = c.id
       <where>
-         cp.is_delete = 0
-      <if test="customerId!= null and customerId!= ''">
-           and c.customer_name like concat('%',#{customerId}, '%')
+         cp.is_deleted = 0
+      <if test="customerName!= null and customerName!= ''">
+           and c.customer_name like concat('%',#{customerName}, '%')
       </if>
       </where>
   </select>
@@ -25,9 +25,9 @@
             from customerpreference cp
             left join customer c on cp.customer_id = c.id
             <where>
-                cp.is_delete = 0
-            <if test="customerId!= null and customerId!= ''">
-                and c.customer_name like concat('%',#{customerId}, '%')
+                cp.is_deleted = 0
+            <if test="customerName!= null and customerName!= ''">
+                and c.customer_name like concat('%',#{customerName}, '%')
             </if>
             </where>
     </select>

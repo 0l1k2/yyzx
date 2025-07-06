@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router"
-
+import ServiceBuy from '../views/health/ServiceBuy.vue'; 
 const routes = [
     {
         // 路由重定向
@@ -34,6 +34,55 @@ const routes = [
                  path: "/customer/checkOut",
                 component: () => import("../views/customer/CheckOut.vue"),
             },
+            {
+                 path: "/customer/preference",
+                component: () => import("../views/customer/Preference.vue"),
+            },
+            {
+                 path: "/customer/meal",
+                component: () => import("../views/customer/Meal.vue"),
+            },
+            {
+                 path: "/nurse/nurseLevel",
+                component: () => import("../views/nurse/NurseLevel.vue"),
+            },
+            {
+                 path: "/nurse/nurseItem",
+                component: () => import("../views/nurse/NurseItem.vue"),
+            },
+            {
+                 path: "/nurse/nurseSetting",
+                component: () => import("../views/nurse/NurseSetting.vue"),
+            },
+            {
+                 path: "/nurse/nurseRecords",
+                component: () => import("../views/nurse/NurseRecords.vue"),
+            },
+            {
+                 path: "/health/serviceCustomerSetting",
+                component: () => import("../views/health/serviceCustomerSetting.vue"),
+            },
+            {
+                 path: "/health/serviceCare",
+                component: () => import("../views/health/ServiceCare.vue"),
+            },
+            {
+                 path: "/user/listUser",
+                component: () => import("../views/user/ListUser.vue"),
+            },
+            {
+                 path: "/health/serviceBuy",
+                component: () => import("../views/health/ServiceBuy.vue"),
+            },
+            {
+                 path: "/nurse/addItemToLevel",
+                component: () => import("../views/nurse/AddItemToLevel.vue"),
+            },
+            {
+                 path: "/health/userToCustomerService",
+                component: () => import("../views/health/UserToCustomerService.vue"),
+            },
+
 
         ]
     },

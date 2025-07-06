@@ -21,4 +21,5 @@ public class UserDto {
     private Integer pageSize;
     @Schema( description = "真实姓名")
     private String nickName;
+
 }

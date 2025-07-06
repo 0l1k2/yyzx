@@ -20,6 +20,9 @@ public class CustomerNurseItemDto {
 
     @Schema(description = "客户编号")
     private Integer customerId;
-
+    @Schema(description = "客户姓名")
+    private String customerName;
+//    @Schema(description = "客户性别")
+//    private Integer manType;
 
 }

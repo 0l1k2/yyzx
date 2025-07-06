@@ -71,17 +71,54 @@ public class CustomernurseitemServiceImpl extends ServiceImpl<CustomernurseitemM
        return ResultVo.ok("护理项目移除成功");
     }
 
-    public ResultVo listCustomerItem(CustomerNurseItemDto customerNurseItemDto) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("currentPage",customerNurseItemDto.getCurrentPage());
-        List<CustomerNurseItemVo> customerNurseItemVoList=customernurseitemMapper.listCustomerItem(customerNurseItemDto);
-        CountVo countVo = customernurseitemMapper.selectCustomerItemCount(customerNurseItemDto);
-        map.put("records",customerNurseItemVoList);
-        map.put("total",countVo.getCount());
-        map.put("size",customerNurseItemDto.getPageSize());
-        map.put("pages",Math.ceil((double)countVo.getCount()/customerNurseItemDto.getPageSize()));
-        return ResultVo.ok(map);
+//    public ResultVo listCustomerItem(CustomerNurseItemDto customerNurseItemDto) {
+//        Map<String,Object> map = new HashMap<>();
+//        map.put("currentPage",customerNurseItemDto.getCurrentPage());
+//        List<CustomerNurseItemVo> customerNurseItemVoList=customernurseitemMapper.listCustomerItem(customerNurseItemDto);
+//        CountVo countVo = customernurseitemMapper.selectCustomerItemCount(customerNurseItemDto);
+//        map.put("records",customerNurseItemVoList);
+//        map.put("total",countVo.getCount());
+//        map.put("size",customerNurseItemDto.getPageSize());
+//        map.put("pages",Math.ceil((double)countVo.getCount()/customerNurseItemDto.getPageSize()));
+//        return ResultVo.ok(map);
+//    }
+@Override
+public ResultVo listCustomerItem(CustomerNurseItemDto customerNurseItemDto) {
+    // 打印原始接收参数
+    System.out.println("接收参数：" + customerNurseItemDto.toString());
+
+    // 处理分页参数
+    Integer currentPage = customerNurseItemDto.getCurrentPage();
+    Integer pageSize = customerNurseItemDto.getPageSize();
+
+    // 设置默认值
+    if (currentPage == null) {
+        currentPage = 1;
+    }
+    if (pageSize == null) {
+        pageSize = 10;
     }
 
+    // 计算正确的SQL LIMIT偏移量
+    Integer offset = (currentPage - 1) * pageSize;
+
+    // 将计算结果设置回原始DTO - 关键修改点
+    customerNurseItemDto.setCurrentPage(offset);
+    customerNurseItemDto.setPageSize(pageSize);
+
+    // 执行数据库查询 - 使用原始DTO作为参数
+    List<CustomerNurseItemVo> customerNurseItemVoList = customernurseitemMapper.listCustomerItem(customerNurseItemDto);
+    CountVo countVo = customernurseitemMapper.selectCustomerItemCount(customerNurseItemDto);
+
+    // 构建返回结果
+    Map<String, Object> resultMap = new HashMap<>();
+    resultMap.put("records", customerNurseItemVoList);
+    resultMap.put("total", countVo.getCount());
+    resultMap.put("size", pageSize);
+    resultMap.put("current", currentPage); // 注意：这里使用原始currentPage，而非offset
+    resultMap.put("pages", Math.ceil((double) countVo.getCount() / pageSize));
+
+    return ResultVo.ok(resultMap);
+}
 
 }

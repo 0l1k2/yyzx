@@ -4,13 +4,17 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author
  * @version 1.0
  * @data 15:16
  */
-
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Schema(name = "CustomerpreferenceVo对象")
 public class CustomerpreferenceVo {
     @TableId(value = "id", type = IdType.AUTO)
     @Schema(description = "喜好ID")

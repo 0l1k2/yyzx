@@ -212,35 +212,37 @@
 	</el-dialog>
   </div>
 </template>
-
-
+<!-- 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import {
-    selectCustomer
-} from '../../api/customerApi';
+import { selectCustomer } from '../../api/customerApi';
 import { listBackdownRecord, addBackdownRecord, deleteBackdownRecord, auditBackdownRecord } from '../../api/backdownApi';
 
 // 查询条件
 const condition = ref({
     customerName: '',
     currentPage: 1,
-    pageSize: 10
+    pageSize: 6
+})
+
+const conditionRecord = ref({
+    currentPage: 1,
+    pageSize: 6
 })
 
 // 客户信息分页
 const page = ref({
     currentPage: 1,
-    pageSize: 10,
+    pageSize: 6,
     total: 0
 })
 
 // 退住记录分页
 const pageRecord = ref({
     currentPage: 1,
-    pageSize: 10,
+    pageSize: 6,
     total: 0
 })
 
@@ -251,8 +253,11 @@ const backdownList = ref([])
 // 客户下拉列表
 const customerList = ref([])
 
-// 角色ID（1:管理员 2:普通用户）
-const roleId = ref(2)
+// 角色ID（1:管理员 2:普通用户） - 需要根据实际登录信息设置
+const roleId = ref(2) // 假设默认是普通用户
+
+// 当前选中的客户
+const currentCustomer = ref(null)
 
 // 对话框状态
 const dialog = ref({
@@ -260,11 +265,12 @@ const dialog = ref({
     dialogExamineVisible: false,
     tops: '',
     item: {
+        id: null,
         customerId: '',
         retreattime: '',
         retreattype: '',
         retreatreason: '',
-        auditstatus: 1,
+        auditstatus: '1', // 默认为同意
         auditopinion: ''
     }
 })
@@ -274,7 +280,7 @@ const itemForm = ref(null)
 const itemExamineForm = ref(null)
 
 // 表单验证规则
-const rules = ref({
+const rules = {
     customerId: [{ required: true, message: '请选择客户', trigger: 'change' }],
     retreattime: [{ required: true, message: '请选择退住时间', trigger: 'change' }],
     retreattype: [{ required: true, message: '请选择退住类型', trigger: 'change' }],
@@ -285,29 +291,30 @@ const rules = ref({
         message: '请输入审批意见', 
         trigger: 'blur',
         validator: (rule, value, callback) => {
-            if (dialog.value.item.auditstatus === 2 && !value) {
+            if (dialog.value.item.auditstatus === '2' && !value) {
                 callback(new Error('拒绝时必须填写审批意见'))
             } else {
                 callback()
             }
         }
     }]
-})
+}
 
 // 查询客户信息
-const query = () => {
-    const params = {
-        customerName: condition.value.customerName,
-        currentPage: page.value.currentPage,
-        pageSize: page.value.pageSize
-    }
-    
-    selectCustomer(params).then(res => {
+const query = async () => {
+    try {
+        const params = {
+            customerName: condition.value.customerName,
+            currentPage: condition.value.currentPage,
+            pageSize: condition.value.pageSize
+        }
+        
+        const res = await selectCustomer(params)
         if (res.flag && res.data) {
             khxxList.value = res.data.records || []
             page.value.total = res.data.total || 0
             
-            // 同步更新客户下拉列表
+            // 更新客户下拉列表
             customerList.value = khxxList.value.map(item => ({ 
                 id: item.id, 
                 customerName: item.customerName
@@ -315,99 +322,90 @@ const query = () => {
         } else {
             ElMessage.error(res.message || '查询客户信息失败')
         }
-    }).catch(error => {
+    } catch (error) {
         console.error('查询客户信息失败', error)
         ElMessage.error('查询客户信息失败')
-    })
+    }
 }
 
 // 客户信息分页切换
 const handleCurrentChange = (val) => {
-    page.value.currentPage = val
+    condition.value.currentPage = val
     query()
 }
 
 // 退住记录分页切换
 const handleRecordChange = (val) => {
-    pageRecord.value.currentPage = val
-    loadBackdownRecords()
+    conditionRecord.value.currentPage = val
+    if (currentCustomer.value && currentCustomer.value.id) {
+        loadBackdownRecords(currentCustomer.value.id)
+    }
 }
 
 // 加载退住记录
-const loadBackdownRecords = (customerId = null) => {
+// const loadBackdownRecords = async (customerId) => {
+//     try {
+//         const params = {
+//             currentPage: conditionRecord.value.currentPage,
+//             pageSize: conditionRecord.value.pageSize,
+//             customerId: customerId
+//         }
+        
+//         const res = await listBackdownRecord(params)
+//         if (res.flag && res.data) {
+//             backdownList.value = res.data.records || []
+//             pageRecord.value.total = res.data.total || 0
+            
+//             // 确保数据完整性：添加缺失字段
+//             backdownList.value = backdownList.value.map(record => ({
+//                 ...record,
+//                 customerName: record.customerName || currentCustomer.value?.customerName || '',
+//                 bedNo: record.bedNo || currentCustomer.value?.bedNo || '',
+//                 retreattype: record.retreattype || '',
+//                 retreatreason: record.retreatreason || '',
+//                 audittime: record.audittime || ''
+//             }))
+//         } else {
+//             ElMessage.error(res.message || '查询退住记录失败')
+//         }
+//     } catch (error) {
+//         console.error('查询退住记录失败', error)
+//         ElMessage.error('查询退住记录失败')
+//     }
+// }
+// 加载退住记录（移除 async）
+const loadBackdownRecords = (customerId) => {
+    if (!customerId) return;
+    
     const params = {
-        currentPage: pageRecord.value.currentPage,
-        pageSize: pageRecord.value.pageSize,
-        userId: roleId.value, // 必须传递用户ID
-        customerId: customerId // 可选：按客户ID筛选
-    }
-    console.log('加载退住记录，参数:', params);
-    if (customerId) {
-        params.customerId = customerId
-    }
+        currentPage: conditionRecord.value.currentPage,
+        pageSize: conditionRecord.value.pageSize,
+        customerId: customerId
+    };
     
-    // listBackdownRecord(params).then(res => {
-    //       if (res.flag && res.data) {
-    //     // 去重处理（按id字段）
-    //     const uniqueRecords = res.data.records.reduce((arr, record) => {
-    //         if (!arr.some(item => item.id === record.id)) {
-    //             arr.push(record);
-    //         }
-    //         return arr;
-    //     }, []);
-        
-    //     backdownList.value = uniqueRecords;
-    //     pageRecord.value.total = uniqueRecords.length;
-    // } else {
-    //     if (res.flag && res.data) {
-    //         backdownList.value = res.data.records || []
-    //         pageRecord.value.total = res.data.total || 0
-    //     } else {
-    //         ElMessage.error(res.message || '查询退住记录失败')
-    //     }
-    // }).catch(error => {
-    //     console.error('查询退住记录失败', error)
-    //     ElMessage.error('查询退住记录失败')
-    // });
-  listBackdownRecord(params).then(res => {
-    console.log('退住记录API响应数据:', res); // 打印完整响应数据用于调试
-    
-    if (res.flag && res.data) {
-        // 1. 数据去重处理（按id字段）
-        const uniqueRecords = res.data.records.reduce((arr, record) => {
-            if (!arr.some(item => item.id === record.id)) {
-                arr.push(record);
-                return arr;
+    listBackdownRecord(params)
+        .then(res => {
+            if (res.flag && res.data) {
+                backdownList.value = res.data.records || [];
+                pageRecord.value.total = res.data.total || 0;
+                
+                // 确保数据完整性（保持原有逻辑）
+                backdownList.value = backdownList.value.map(record => ({
+                    ...record,
+                    customerName: record.customerName || currentCustomer.value?.customerName || '',
+                    bedNo: record.bedNo || currentCustomer.value?.bedNo || '',
+                    retreattype: record.retreattype || '',
+                    retreatreason: record.retreatreason || '',
+                    audittime: record.audittime || ''
+                }));
+            } else {
+                ElMessage.error(res.message || '查询退住记录失败');
             }
-            return arr;
-        }, []);
-        
-        // 2. 赋值去重后的数据
-        backdownList.value = uniqueRecords;
-        pageRecord.value.total = uniqueRecords.length;
-        
-        // 3. 显示数据加载结果提示
-        if (uniqueRecords.length > 0) {
-            console.log(`成功加载 ${uniqueRecords.length} 条退住记录`);
-        } else {
-            ElMessage.info('暂无退住记录数据');
-        }
-    } else {
-        // 处理API返回失败的情况
-        const errorMessage = res.message || '查询退住记录失败，请检查网络或稍后再试';
-        ElMessage.error(errorMessage);
-        backdownList.value = []; // 清空数据避免显示旧数据
-        pageRecord.value.total = 0;
-    }
-}).catch(error => {
-    console.error('退住记录API请求异常:', error); // 打印异常详情
-    
-    // 处理网络异常或接口错误
-    ElMessage.error('加载退住记录失败，请检查网络连接');
-    backdownList.value = [];
-    pageRecord.value.total = 0;
-});
-
+        })
+        .catch(error => {
+            console.error('查询退住记录失败', error);
+            ElMessage.error('查询退住记录失败');
+        });
 }
 
 // 客户表格序号计算
@@ -423,7 +421,8 @@ const indexMethodRecord = (index) => {
 // 选择客户并查询其退住记录
 const handleChangeCustomer = (row) => {
     if (row && row.id) {
-        pageRecord.value.currentPage = 1
+        currentCustomer.value = row
+        conditionRecord.value.currentPage = 1
         loadBackdownRecords(row.id)
     }
 }
@@ -433,105 +432,218 @@ const addItem = () => {
     dialog.value.tops = '添加退住申请'
     dialog.value.dialogVisible = true
     dialog.value.item = {
+        id: null,
         customerId: '',
         retreattime: '',
         retreattype: '',
         retreatreason: '',
-        auditstatus: 0,
+        auditstatus: '1',
         auditopinion: ''
     }
 }
 
 // 保存退住申请
-const save = async () => {
-    try {
-        // 表单验证
-        await itemForm.value.validate()
+// const save = () => {
+//   // 表单验证
+//   itemForm.value.validate()
+//     .then(() => {
+//       // 添加当前客户ID（如果从下拉选择）
+//       if (!dialog.value.item.customerId && currentCustomer.value) {
+//         dialog.value.item.customerId = currentCustomer.value.id
+//       }
+      
+//       // 调用API保存退住申请
+//       return addBackdownRecord(dialog.value.item)
+//     })
+//     .then(res => {
+//       if (res.flag) {
+//         ElMessage.success('退住申请保存成功')
+//         dialog.value.dialogVisible = false
+//         // 重新加载退住记录
+//         if (currentCustomer.value?.id) {
+//           loadBackdownRecords(currentCustomer.value.id)
+//         }
+//       } else {
+//         ElMessage.error(res.message || '保存失败')
+//       }
+//       return res // 传递结果给后续处理
+//     })
+//     .catch(error => {
+//       // 单独处理验证错误（Element UI已处理界面提示）
+//       if (error?.name === 'ValidateError' || error?.fields) {
+//         return // 不显示额外错误
+//       }
+      
+//       // 其他错误处理
+//       console.error('保存退住申请失败', error)
+//       ElMessage.error(typeof error === 'string' ? error : '保存失败')
+//     })
+// }// 保存退住申请（移除 async）
+const save = () => {
+    itemForm.value.validate((valid) => {
+        if (!valid) return;
         
-        // 调用API保存退住申请
-        const res = await addBackdownRecord(dialog.value.item)
+        // 添加当前客户ID（如果从下拉选择）
+        if (!dialog.value.item.customerId && currentCustomer.value) {
+            dialog.value.item.customerId = currentCustomer.value.id;
+        }
         
-        if (res.flag) {
-            ElMessage.success('退住申请保存成功')
-            dialog.value.dialogVisible = false
-            loadBackdownRecords()
-        } else {
-            ElMessage.error(res.message || '保存失败')
-        }
-    } catch (error) {
-        if (error !== 'validate') {
-            console.error('保存退住申请失败', error)
-            ElMessage.error('保存失败')
-        }
-    }
+        addBackdownRecord(dialog.value.item)
+            .then(res => {
+                if (res.flag) {
+                    ElMessage.success('退住申请保存成功');
+                    dialog.value.dialogVisible = false;
+                    if (currentCustomer.value?.id) {
+                        loadBackdownRecords(currentCustomer.value.id);
+                    }
+                } else {
+                    ElMessage.error(res.message || '保存失败');
+                }
+            })
+            .catch(error => {
+                console.error('保存退住申请失败', error);
+                ElMessage.error('保存失败');
+            });
+    });
 }
 
 // 撤销申请
-const del = async (id) => {
-    try {
-        await ElMessageBox.confirm(
-            '确定要撤销此退住申请吗? 此操作不可恢复',
-            '提示',
-            {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning',
-            }
-        )
-        
-        const res = await deleteBackdownRecord(id)
-        
+// const del = (id) => {
+//   ElMessageBox.confirm(
+//     '确定要撤销此退住申请吗? 此操作不可恢复',
+//     '提示',
+//     {
+//       confirmButtonText: '确定',
+//       cancelButtonText: '取消',
+//       type: 'warning',
+//     }
+//   )
+//   .then(() => deleteBackdownRecord(id))
+//   .then(res => {
+//     if (res.flag) {
+//       ElMessage.success('退住申请已撤销')
+//       if (currentCustomer.value?.id) {
+//         loadBackdownRecords(currentCustomer.value.id)
+//       }
+//     } else {
+//       ElMessage.error(res.message || '撤销失败')
+//     }
+//   })
+//   .catch(error => {
+//     // 用户取消操作不报错
+//     if (error === 'cancel' || error?.includes('取消')) return
+//     console.error('撤销退住申请失败', error)
+//     ElMessage.error('撤销失败')
+//   })
+// }
+// 撤销申请（移除 async）
+const del = (id) => {
+    ElMessageBox.confirm(
+        '确定要撤销此退住申请吗? 此操作不可恢复',
+        '提示',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+    .then(() => deleteBackdownRecord(id))
+    .then(res => {
         if (res.flag) {
-            ElMessage.success('退住申请已撤销')
-            loadBackdownRecords()
+            ElMessage.success('退住申请已撤销');
+            if (currentCustomer.value?.id) {
+                loadBackdownRecords(currentCustomer.value.id);
+            }
         } else {
-            ElMessage.error(res.message || '撤销失败')
+            ElMessage.error(res.message || '撤销失败');
         }
-    } catch (error) {
+    })
+    .catch(error => {
         if (error !== 'cancel') {
-            console.error('撤销退住申请失败', error)
-            ElMessage.error('撤销失败')
+            console.error('撤销退住申请失败', error);
+            ElMessage.error('撤销失败');
         }
-    }
-}
-
-// 审批退住申请
-const examine = (row) => {
-    dialog.value.tops = '审批退住申请'
-    dialog.value.dialogExamineVisible = true
-    dialog.value.item = { 
-        id: row.id,
-        customerId: row.customerId,
-        retreattime: row.retreattime,
-        retreattype: row.retreattype,
-        retreatreason: row.retreatreason,
-        auditstatus: 1,
-        auditopinion: ''
-    }
+    });
 }
 
 // 审批保存
-const examineBackdown = async () => {
-    try {
-        // 表单验证
-        await itemExamineForm.value.validate()
+// const examineBackdown = () => {
+//   itemExamineForm.value.validate()
+//     .then(() => {
+//       // 构造审批参数
+//       const params = {
+//         id: dialog.value.item.id,
+//         auditstatus: dialog.value.item.auditstatus,
+//         auditopinion: dialog.value.item.auditstatus === '2' 
+//           ? dialog.value.item.auditopinion 
+//           : ''
+//       }
+      
+//       // 调用API审批
+//       return auditBackdownRecord(params)
+//     })
+//     .then(res => {
+//       if (res.flag) {
+//         ElMessage.success('审批完成')
+//         dialog.value.dialogExamineVisible = false
+//         if (currentCustomer.value?.id) {
+//           loadBackdownRecords(currentCustomer.value.id)
+//         }
+//       } else {
+//         ElMessage.error(res.message || '审批失败')
+//       }
+//     })
+//     .catch(error => {
+//       // 验证错误不额外处理
+//       if (error?.name === 'ValidateError' || error?.fields) return
+//       console.error('审批退住申请失败', error)
+//       ElMessage.error('审批失败')
+//     })
+// }
+// 审批保存（移除 async）
+const examineBackdown = () => {
+    itemExamineForm.value.validate((valid) => {
+        if (!valid) return;
         
-        // 调用API审批退住申请
-        const res = await auditBackdownRecord(dialog.value.item)
+        const auditData = {
+            id: dialog.value.item.id,
+            auditstatus: dialog.value.item.auditstatus,
+            auditopinion: dialog.value.item.auditstatus === '2' 
+                ? dialog.value.item.auditopinion 
+                : ''
+        };
         
-        if (res.flag) {
-            ElMessage.success('审批完成')
-            dialog.value.dialogExamineVisible = false
-            loadBackdownRecords()
-        } else {
-            ElMessage.error(res.message || '审批失败')
-        }
-    } catch (error) {
-        if (error !== 'validate') {
-            console.error('审批退住申请失败', error)
-            ElMessage.error('审批失败')
-        }
-    }
+        auditBackdownRecord(auditData)
+            .then(res => {
+                if (res.flag) {
+                    ElMessage.success('审批完成');
+                    dialog.value.dialogExamineVisible = false;
+                    if (currentCustomer.value?.id) {
+                        loadBackdownRecords(currentCustomer.value.id);
+                    }
+                } else {
+                    ElMessage.error(res.message || '审批失败');
+                }
+            })
+            .catch(error => {
+                console.error('审批退住申请失败', error);
+                ElMessage.error('审批失败');
+            });
+    });
+}
+
+// 审批退住申请（非异步方法保持不变）
+const examine = (id) => {
+  const record = backdownList.value.find(item => item.id === id)
+  if (!record) return
+
+  dialog.value.tops = '审批退住申请'
+  dialog.value.dialogExamineVisible = true
+  dialog.value.item = { 
+    id: record.id,
+    auditstatus: String(record.auditstatus || '1'),
+    auditopinion: record.auditopinion || ''
+  }
 }
 
 // 关闭添加/编辑对话框
@@ -557,10 +669,667 @@ const cancelExamine = () => {
 // 组件挂载时加载数据
 onMounted(() => {
     query()
-    loadBackdownRecords();
+})
+
+{/* <script setup>
+import { ref, onMounted, nextTick } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
+import { selectCustomer } from '../../api/customerApi';
+
+// 查询条件
+const condition = ref({
+    customerName: '',
+    currentPage: 1,
+    pageSize: 6
+})
+
+const conditionRecord = ref({
+    currentPage: 1,
+    pageSize: 6
+})
+
+// 客户信息分页
+const page = ref({
+    currentPage: 1,
+    pageSize: 6,
+    total: 0
+})
+
+// 退住记录分页
+const pageRecord = ref({
+    currentPage: 1,
+    pageSize: 6,
+    total: 0
+})
+
+// 客户信息列表
+const khxxList = ref([])
+// 退住记录列表
+const backdownList = ref([])
+// 客户下拉列表
+const customerList = ref([])
+
+// 角色ID（1:管理员 2:普通用户） - 需要根据实际登录信息设置
+const roleId = ref(2) // 假设默认是普通用户
+
+// 当前选中的客户
+const currentCustomer = ref(null)
+
+// 对话框状态
+const dialog = ref({
+    dialogVisible: false,
+    dialogExamineVisible: false,
+    tops: '',
+    item: {
+        id: null,
+        customerId: '',
+        retreattime: '',
+        retreattype: '',
+        retreatreason: '',
+        auditstatus: '1', // 默认为同意
+        auditopinion: ''
+    }
+})
+
+// 表单引用
+const itemForm = ref(null)
+const itemExamineForm = ref(null)
+
+// 表单验证规则
+const rules = {
+    customerId: [{ required: true, message: '请选择客户', trigger: 'change' }],
+    retreattime: [{ required: true, message: '请选择退住时间', trigger: 'change' }],
+    retreattype: [{ required: true, message: '请选择退住类型', trigger: 'change' }],
+    retreatreason: [{ required: true, message: '请输入退住原因', trigger: 'blur' }],
+    auditstatus: [{ required: true, message: '请选择审批状态', trigger: 'change' }],
+    auditopinion: [{ 
+        required: true, 
+        message: '请输入审批意见', 
+        trigger: 'blur',
+        validator: (rule, value, callback) => {
+            if (dialog.value.item.auditstatus === '2' && !value) {
+                callback(new Error('拒绝时必须填写审批意见'))
+            } else {
+                callback()
+            }
+        }
+    }]
+}
+
+// 查询客户信息
+const query = async () => {
+    try {
+        const params = {
+            customerName: condition.value.customerName,
+            currentPage: condition.value.currentPage,
+            pageSize: condition.value.pageSize
+        }
+        
+        const res = await selectCustomer(params)
+        if (res.flag && res.data) {
+            khxxList.value = res.data.records || []
+            page.value.total = res.data.total || 0
+            
+            // 更新客户下拉列表
+            customerList.value = khxxList.value.map(item => ({ 
+                id: item.id, 
+                customerName: item.customerName
+            }))
+        } else {
+            ElMessage.error(res.message || '查询客户信息失败')
+        }
+    } catch (error) {
+        console.error('查询客户信息失败', error)
+        ElMessage.error('查询客户信息失败')
+    }
+}
+
+// 客户信息分页切换
+const handleCurrentChange = (val) => {
+    condition.value.currentPage = val
+    query()
+}
+
+// 退住记录分页切换
+const handleRecordChange = (val) => {
+    conditionRecord.value.currentPage = val
+    if (currentCustomer.value && currentCustomer.value.id) {
+        loadBackdownRecords(currentCustomer.value.id)
+    }
+}
+
+// 加载退住记录
+const loadBackdownRecords = async (customerId) => {
+    try {
+        const params = {
+            currentPage: conditionRecord.value.currentPage,
+            pageSize: conditionRecord.value.pageSize,
+            customerId: customerId
+        }
+        
+        // 调用后端接口获取退住记录
+        const res = await http.post(`/backdown/listBackdownVo`, params)
+        if (res.flag && res.data) {
+            backdownList.value = res.data.records || []
+            pageRecord.value.total = res.data.total || 0
+            
+            // 确保数据完整性：添加缺失字段
+            backdownList.value = backdownList.value.map(record => ({
+                ...record,
+                customerName: record.customerName || currentCustomer.value?.customerName || '',
+                bedNo: record.bedNo || currentCustomer.value?.bedNo || '',
+                retreattype: record.retreattype || '',
+                retreatreason: record.retreatreason || '',
+                audittime: record.audittime || ''
+            }))
+        } else {
+            ElMessage.error(res.message || '查询退住记录失败')
+        }
+    } catch (error) {
+        console.error('查询退住记录失败', error)
+        ElMessage.error('查询退住记录失败')
+    }
+}
+
+// 客户表格序号计算
+const indexMethod = (index) => {
+    return (page.value.currentPage - 1) * page.value.pageSize + index + 1
+}
+
+// 退住记录表格序号计算
+const indexMethodRecord = (index) => {
+    return (pageRecord.value.currentPage - 1) * pageRecord.value.pageSize + index + 1
+}
+
+// 选择客户并查询其退住记录
+const handleChangeCustomer = (row) => {
+    if (row && row.id) {
+        currentCustomer.value = row
+        conditionRecord.value.currentPage = 1
+        loadBackdownRecords(row.id)
+    }
+}
+
+// 添加退住申请
+const addItem = () => {
+    dialog.value.tops = '添加退住申请'
+    dialog.value.dialogVisible = true
+    dialog.value.item = {
+        id: null,
+        customerId: '',
+        retreattime: '',
+        retreattype: '',
+        retreatreason: '',
+        auditstatus: '1',
+        auditopinion: ''
+    }
+}
+
+// 保存退住申请
+const save = async () => {
+    try {
+        // 表单验证
+        await itemForm.value.validate()
+        
+        // 添加当前客户ID（如果从下拉选择）
+        if (!dialog.value.item.customerId && currentCustomer.value) {
+            dialog.value.item.customerId = currentCustomer.value.id
+        }
+        
+        // 调用API保存退住申请
+        const res = await http.post(`/backdown/addBackdown`, dialog.value.item)
+        
+        if (res.flag) {
+            ElMessage.success('退住申请保存成功')
+            dialog.value.dialogVisible = false
+            // 重新加载退住记录
+            if (currentCustomer.value && currentCustomer.value.id) {
+                loadBackdownRecords(currentCustomer.value.id)
+            }
+        } else {
+            ElMessage.error(res.message || '保存失败')
+        }
+    } catch (error) {
+        // 验证失败不显示错误消息（Element UI会处理）
+        if (error !== 'validate') {
+            console.error('保存退住申请失败', error)
+            ElMessage.error('保存失败')
+        }
+    }
+}
+
+// 撤销申请
+const del = async (id) => {
+    try {
+        await ElMessageBox.confirm(
+            '确定要撤销此退住申请吗? 此操作不可恢复',
+            '提示',
+            {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+            }
+        )
+        
+        // 调用后端接口删除退住申请
+        const res = await http.get(`/backdown/delBackdown?id=${id}`)
+        
+        if (res.flag) {
+            ElMessage.success('退住申请已撤销')
+            // 重新加载退住记录
+            if (currentCustomer.value && currentCustomer.value.id) {
+                loadBackdownRecords(currentCustomer.value.id)
+            }
+        } else {
+            ElMessage.error(res.message || '撤销失败')
+        }
+    } catch (error) {
+        // 用户取消操作不显示错误
+        if (error !== 'cancel') {
+            console.error('撤销退住申请失败', error)
+            ElMessage.error('撤销失败')
+        }
+    }
+}
+
+// 审批退住申请
+const examine = (id) => {
+    // 找到要审批的记录
+    const record = backdownList.value.find(item => item.id === id)
+    if (record) {
+        dialog.value.tops = '审批退住申请'
+        dialog.value.dialogExamineVisible = true
+        dialog.value.item = { 
+            id: record.id,
+            auditstatus: String(record.auditstatus || '1'), // 确保是字符串
+            auditopinion: record.auditopinion || ''
+        }
+    }
+}
+
+// 审批保存
+const examineBackdown = async () => {
+    try {
+        // 表单验证
+        await itemExamineForm.value.validate()
+        
+        // 准备审批数据
+        const auditData = {
+            id: dialog.value.item.id,
+            auditstatus: dialog.value.item.auditstatus,
+            auditopinion: dialog.value.item.auditstatus === '2' 
+                ? dialog.value.item.auditopinion 
+                : ''
+        }
+        
+        // 调用API审批退住申请
+        const res = await http.post(`/backdown/examineBackdown`, auditData)
+        
+        if (res.flag) {
+            ElMessage.success('审批完成')
+            dialog.value.dialogExamineVisible = false
+            // 重新加载退住记录
+            if (currentCustomer.value && currentCustomer.value.id) {
+                loadBackdownRecords(currentCustomer.value.id)
+            }
+        } else {
+            ElMessage.error(res.message || '审批失败')
+        }
+    } catch (error) {
+        // 验证失败不显示错误消息
+        if (error !== 'validate') {
+            console.error('审批退住申请失败', error)
+            ElMessage.error('审批失败')
+        }
+    }
+}
+
+// 关闭添加/编辑对话框
+const handleClose = () => {
+    dialog.value.dialogVisible = false
+}
+
+// 关闭审批对话框
+const handleExamineClose = () => {
+    dialog.value.dialogExamineVisible = false
+}
+
+// 取消添加/编辑
+const cancel = () => {
+    dialog.value.dialogVisible = false
+}
+
+// 取消审批
+const cancelExamine = () => {
+    dialog.value.dialogExamineVisible = false
+} */}
+
+// 组件挂载时加载数据
+// onMounted(() => {
+//     query()
+// })
+</script> -->
+
+<script setup>
+import { ref, onMounted, nextTick } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
+import { selectCustomer } from '../../api/customerApi';
+import { listBackdownRecord, addBackdownRecord, deleteBackdownRecord, auditBackdownRecord } from '../../api/backdownApi';
+
+// 查询条件
+const condition = ref({
+    customerName: '',
+    currentPage: 1,
+    pageSize: 6
+})
+
+// 退住记录分页
+const pageRecord = ref({
+    currentPage: 1,
+    pageSize: 6,
+    total: 0
+})
+
+// 客户信息分页
+const page = ref({
+    currentPage: 1,
+    pageSize: 6,
+    total: 0
+})
+
+// 客户信息列表
+const khxxList = ref([])
+// 退住记录列表
+const backdownList = ref([])
+// 客户下拉列表
+const customerList = ref([])
+
+// 角色ID（1:管理员 2:普通用户）
+const roleId = ref(2)
+
+// 当前选中的客户
+const currentCustomer = ref(null)
+
+// 对话框状态
+const dialog = ref({
+    dialogVisible: false,
+    dialogExamineVisible: false,
+    tops: '',
+    item: {
+        id: null,
+        customerId: '',
+        retreattime: '',
+        retreattype: '',
+        retreatreason: '',
+        auditstatus: '1',
+        auditopinion: ''
+    }
+})
+
+// 表单引用
+const itemForm = ref(null)
+const itemExamineForm = ref(null)
+
+// 表单验证规则
+const rules = {
+    customerId: [{ required: true, message: '请选择客户', trigger: 'change' }],
+    retreattime: [{ required: true, message: '请选择退住时间', trigger: 'change' }],
+    retreattype: [{ required: true, message: '请选择退住类型', trigger: 'change' }],
+    retreatreason: [{ required: true, message: '请输入退住原因', trigger: 'blur' }],
+    auditstatus: [{ required: true, message: '请选择审批状态', trigger: 'change' }],
+    auditopinion: [{ 
+        required: true, 
+        message: '请输入审批意见', 
+        trigger: 'blur',
+        validator: (rule, value, callback) => {
+            if (dialog.value.item.auditstatus === '2' && !value) {
+                callback(new Error('拒绝时必须填写审批意见'))
+            } else {
+                callback()
+            }
+        }
+    }]
+}
+
+// 查询客户信息
+const query = () => {
+    const params = {
+        customerName: condition.value.customerName,
+        currentPage: page.value.currentPage,
+        pageSize: page.value.pageSize
+    }
+    
+    selectCustomer(params)
+        .then(res => {
+            if (res.flag && res.data) {
+                khxxList.value = res.data.records || []
+                page.value.total = res.data.total || 0
+                
+                // 更新客户下拉列表
+                customerList.value = khxxList.value.map(item => ({ 
+                    id: item.id, 
+                    customerName: item.customerName
+                }))
+            } else {
+                ElMessage.error(res.message || '查询客户信息失败')
+            }
+        })
+        .catch(error => {
+            console.error('查询客户信息失败', error)
+            ElMessage.error('查询客户信息失败')
+        })
+}
+
+// 客户信息分页切换
+const handleCurrentChange = (val) => {
+    page.value.currentPage = val
+    query()
+}
+
+// 退住记录分页切换
+const handleRecordChange = (val) => {
+    pageRecord.value.currentPage = val
+    if (currentCustomer.value && currentCustomer.value.id) {
+        loadBackdownRecords(currentCustomer.value.id)
+    }
+}
+
+// 加载退住记录
+const loadBackdownRecords = (customerId) => {
+    if (!customerId) return
+    
+    const params = {
+        currentPage: pageRecord.value.currentPage,
+        pageSize: pageRecord.value.pageSize,
+        customerId: customerId
+    }
+    
+    listBackdownRecord(params)
+        .then(res => {
+            if (res.flag && res.data) {
+                backdownList.value = res.data.records || []
+                pageRecord.value.total = res.data.total || 0
+                
+                // 确保数据完整性
+                backdownList.value = backdownList.value.map(record => ({
+                    ...record,
+                    customerName: record.customerName || currentCustomer.value?.customerName || '',
+                    bedNo: record.bedNo || currentCustomer.value?.bedNo || '',
+                    retreattype: record.retreattype || '',
+                    retreatreason: record.retreatreason || '',
+                    audittime: record.audittime || ''
+                }))
+            } else {
+                ElMessage.error(res.message || '查询退住记录失败')
+            }
+        })
+        .catch(error => {
+            console.error('查询退住记录失败', error)
+            ElMessage.error('查询退住记录失败')
+        })
+}
+
+
+// 客户表格序号计算
+const indexMethod = (index) => {
+    return (page.value.currentPage - 1) * page.value.pageSize + index + 1
+}
+
+// 退住记录表格序号计算
+const indexMethodRecord = (index) => {
+    return (pageRecord.value.currentPage - 1) * pageRecord.value.pageSize + index + 1
+}
+
+// 选择客户并查询其退住记录
+const handleChangeCustomer = (row) => {
+    if (row && row.id) {
+        currentCustomer.value = row
+        pageRecord.value.currentPage = 1
+        loadBackdownRecords(row.id)
+    }
+}
+
+// 添加退住申请
+const addItem = () => {
+    dialog.value.tops = '添加退住申请'
+    dialog.value.dialogVisible = true
+    dialog.value.item = {
+        id: null,
+        customerId: '',
+        retreattime: '',
+        retreattype: '',
+        retreatreason: '',
+        auditstatus: '1',
+        auditopinion: ''
+    }
+}
+
+// 保存退住申请
+
+const save = () => {
+  itemForm.value.validate((valid) => {
+    if (!valid) return;
+    
+    if (!dialog.value.item.customerId && currentCustomer.value) {
+      dialog.value.item.customerId = currentCustomer.value.id;
+    }
+    
+    addBackdownRecord(dialog.value.item)
+      .then(res => {
+        if (res.flag) {
+          ElMessage.success('保存成功');
+          dialog.value.dialogVisible = false;
+          if (currentCustomer.value?.id) {
+            pageRecord.value.currentPage = 1; // 重置到第1页
+            loadBackdownRecords(currentCustomer.value.id);
+          }
+        } else {
+          ElMessage.error(res.message || '保存失败');
+        }
+      })
+      .catch(error => {
+        console.error('保存失败:', error);
+        ElMessage.error('保存失败');
+      });
+  });
+};
+
+// 撤销申请（添加分页重置）
+const del = (id) => {
+  ElMessageBox.confirm('确定撤销？', '提示', { type: 'warning' })
+    .then(() => deleteBackdownRecord(id))
+    .then(res => {
+      if (res.flag) {
+        ElMessage.success('撤销成功');
+        if (currentCustomer.value?.id) {
+          pageRecord.value.currentPage = 1; // 重置到第1页
+          loadBackdownRecords(currentCustomer.value.id);
+        }
+      } else {
+        ElMessage.error(res.message || '撤销失败');
+      }
+    })
+    .catch(error => {
+      if (error !== 'cancel') ElMessage.error('撤销失败');
+    });
+};
+
+// 审批保存（添加分页重置）
+const examineBackdown = () => {
+  itemExamineForm.value.validate((valid) => {
+    if (!valid) return;
+    
+    const auditData = {
+      id: dialog.value.item.id,
+      auditstatus: dialog.value.item.auditstatus,
+      auditopinion: dialog.value.item.auditstatus === '2' ? dialog.value.item.auditopinion : ''
+    };
+    
+    auditBackdownRecord(auditData)
+      .then(res => {
+        if (res.flag) {
+          ElMessage.success('审批完成');
+          dialog.value.dialogExamineVisible = false;
+          if (currentCustomer.value?.id) {
+            pageRecord.value.currentPage = 1; // 重置到第1页
+            loadBackdownRecords(currentCustomer.value.id);
+          }
+        } else {
+          ElMessage.error(res.message || '审批失败');
+        }
+      })
+      .catch(error => {
+        console.error('审批失败:', error);
+        ElMessage.error('审批失败');
+      });
+  });
+};
+
+// 审批退住申请
+const examine = (id) => {
+    const record = backdownList.value.find(item => item.id === id)
+    if (!record) return
+
+    dialog.value.tops = '审批退住申请'
+    dialog.value.dialogExamineVisible = true
+    dialog.value.item = { 
+        id: record.id,
+        auditstatus: String(record.auditstatus || '1'),
+        auditopinion: record.auditopinion || ''
+    }
+}
+// 在 <script setup> 中添加方法定义
+const djhandleClose = () => {
+  // 处理对话框关闭逻辑
+  dialogVisible.value = false;
+};
+// 关闭添加/编辑对话框
+const handleClose = () => {
+    dialog.value.dialogVisible = false
+}
+
+// 关闭审批对话框
+const handleExamineClose = () => {
+    dialog.value.dialogExamineVisible = false
+}
+
+// 取消添加/编辑
+const cancel = () => {
+    dialog.value.dialogVisible = false
+}
+
+// 取消审批
+const cancelExamine = () => {
+    dialog.value.dialogExamineVisible = false
+}
+
+// 组件挂载时加载数据
+onMounted(() => {
+    query()
 })
 </script>
-
 <style scoped>
 .table-main {
   height: 600px;

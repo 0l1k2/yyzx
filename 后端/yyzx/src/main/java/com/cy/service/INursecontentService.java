@@ -10,4 +10,5 @@ public interface INursecontentService extends IService<Nursecontent> {
     ResultVo delNurseItem(Integer id);
 
     ResultVo listNurseItemByLevel(Integer levelId);
+
 }

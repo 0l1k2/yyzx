@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import java.io.Serializable;
+import java.util.Date;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -61,19 +62,19 @@ public class Outward implements Serializable {
      * 外出时间
      */
     @Schema(description = "外出时间")
-    private LocalDate outgoingtime;
+    private Date outgoingtime;
 
     /**
      * 预计回院时间
      */
     @Schema (description = "预计回院时间")
-    private LocalDate expectedreturntime;
+    private Date expectedreturntime;
 
     /**
      * 实际回院时间
      */
     @Schema (description = "实际回院时间")
-    private LocalDate actualreturntime;
+    private Date actualreturntime;
 
     /**
      * 陪同人
@@ -109,7 +110,7 @@ public class Outward implements Serializable {
      * 审批时间
      */
     @Schema(description = "审批时间")
-    private LocalDate audittime;
+    private Date audittime;
 
 
 }
