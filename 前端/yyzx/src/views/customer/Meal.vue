@@ -393,201 +393,440 @@ export default {
 };
 
 </script> -->
-<script>
+<script setup>
+import { 
+  ref, 
+  onMounted, 
+  watch
+} from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Plus, EditPen, Close } from '@element-plus/icons-vue'
+
+// API 导入
 import {
- addMeal,
- updateMeal,
- delMeal,
- findMeal
-} from "../../api/mealApi.js";
-import { findFood } from "../../api/foodApi.js";
-export default {
-  data() {
-    return {
-      mealtypeList: [
-        { typeId: 1, mealtypeName: '早餐' },
-        { typeId: 2, mealtypeName: '午餐' },
-        { typeId: 3, mealtypeName: '晚餐' }
-      ],
-      weekdayList: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-      currentDate: '1997-7-7',
-      dialog: {
-        dialogVisible: false,
-        tops: "",
-        item: {
-          id: "",
-          foodId: "",
-          foodName: "",
-          foodType: "",
-          price: "",
-          isHalal: "",
-          weekDay: "",
-          mealType: "",
-          taste: "",
-          isDeleted: 0
-        }
-      },
-      btnFlag: true,
-      queryParams: {
-        mealType: 1,
-        weekDay: "周一",
-        pageSize: 6
-      },
-      breakfastList: [],
-      lunchList: [],
-      dinnerList: [],
-      foodList: [],
-      mealList: [],
-      path: '',
-      hasFood: true
-    };
-  },
-  mounted() {
-    this.getFoodList();
-    this.getMealList(1);
-    this.getMealList(2);
-    this.getMealList(3);
-  },
-  watch: {
-    'queryParams.weekDay'(newVal, oldVal) {
-      this.getMealList(1);
-      this.getMealList(2);
-      this.getMealList(3);
-    }
-  },
-  methods: {
-    foodFullImg(foodImg) {
-      return 'http://localhost:9999/yyzx/images/' + foodImg;
-    },
-    // 修改
-    edit(meal, mealType) {
-      this.dialog.tops = "修改膳食日历";
-      this.dialog.dialogVisible = true;
-      this.$nextTick(() => {
-        this.dialog.item.id = meal.id;
-        this.dialog.item.foodId = meal.foodId;
-        this.dialog.item.foodName = meal.foodName;
-        this.dialog.item.foodType = meal.foodType;
-        this.dialog.item.price = meal.price;
-        this.dialog.item.isHalal = meal.isHalal;
-        this.dialog.item.weekDay = meal.weekDay;
-        this.dialog.item.mealType = mealType;
-        this.dialog.item.taste = meal.taste;
-      });
-    },
-    // 添加
-    addItem() {
-      this.dialog.tops = "添加膳食管理";
-      this.dialog.dialogVisible = true;
-      this.dialog.item = {
-        id: "",
-        foodId: "",
-        foodName: "",
-        foodType: "",
-        price: "",
-        isHalal: "",
-        weekDay: this.queryParams.weekDay,
-        mealType: this.queryParams.mealType,
-        taste: "",
-        isDeleted: 0
-      };
-      this.getFoodList();
-    },
-    handleClose() {
-      this.dialog.dialogVisible = false;
-      this.resetForm("itemForm");
-    },
-    cancel() {
-      this.handleClose();
-    },
-    resetForm(formName) {
-      if (this.$refs[formName]) {
-        this.$refs[formName].resetFields();
-      }
-    },
-    // 保存(新增/编辑)
-    save(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          // 新增
-          if (!this.dialog.item.id) {
-            addMeal(this.dialog.item).then(res => {
-              if (res.flag) {
-                this.$message.success(res.message);
-                this.getMealList(this.dialog.item.mealType);
-                this.handleClose();
-              } else {
-                this.$message.error(res.message);
-              }
-            });
-          } else {
-            // 编辑
-            updateMeal(this.dialog.item).then(res => {
-              if (res.flag) {
-                this.$message.success(res.message);
-                this.getMealList(this.dialog.item.mealType);
-                this.handleClose();
-              } else {
-                this.$message.error(res.message);
-              }
-            });
-          }
-        } else {
-          return false;
-        }
-      });
-    },
-    // 删除
-    del(id, mealType) {
-      this.$confirm("此操作删除记录, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          delMeal(id).then(res => {
-            if (res.flag) {
-              this.$message.success(res.message);
-              this.getMealList(mealType);
-            } else {
-              this.$message.error(res.message);
-            }
-          });
-        })
-        .catch(() => { });
-    },
-    // 查询膳食日历
-    async getMealList(typeId) {
-      this.queryParams.mealType = typeId;
-      await findMeal(this.queryParams).then(res => {
-        if (typeId == 1) {
-          this.breakfastList = res.data.records || [];
-        } else if (typeId == 2) {
-          this.lunchList = res.data.records || [];
-        } else {
-          this.dinnerList = res.data.records || [];
-        }
-      });
-    },
-    // 查询食品列表
-    getFoodList() {
-      // 只查全部食品，不分页
-      findFood(1, 1000).then(res => {
-        this.foodList = res.data.records || [];
-      });
-    },
-    handleTabClick(tab, event) {
-      this.queryParams.weekDay = this.weekdayList[tab.index];
-      this.getMealList(1);
-      this.getMealList(2);
-      this.getMealList(3);
-    },
-    changeType(typeId) {
-      this.queryParams.mealType = typeId;
-    }
+  addMeal,
+  updateMeal,
+  delMeal,
+  findMeal
+} from "../../api/mealApi.js"
+import { findFood } from "../../api/foodApi.js"
+
+// 响应式数据
+const mealtypeList = ref([
+  { typeId: 1, mealtypeName: '早餐' },
+  { typeId: 2, mealtypeName: '午餐' },
+  { typeId: 3, mealtypeName: '晚餐' }
+])
+
+const weekdayList = ref(['周一','周二','周三','周四','周五','周六','周日'])
+const currentDate = ref('1997-7-7')
+
+const dialog = ref({
+  dialogVisible: false,
+  tops: "",
+  item: {
+    id: "",
+    foodId: "",
+    foodName: "",
+    foodType: "",
+    price: "",
+    isHalal: "",
+    weekDay: "",
+    mealType: 0,
+    taste: "",
+    isDeleted: 0
   }
-};
+})
+
+const queryParams = ref({
+  currentPage: 1,  // 修改为后端需要的参数名
+  pageSize: 6,     // 保持与后端一致
+  weekDay: "周一",
+  mealType: 1,     // 默认早餐
+  mealId: 0        // 添加缺失的mealId参数
+})
+
+const breakfastList = ref([])
+const lunchList = ref([])
+const dinnerList = ref([])
+const foodList = ref([])
+const itemForm = ref(null)
+
+// 表单验证规则
+const rules = ref({
+  mealType: [{ required: true, message: '请选择膳食类型', trigger: 'change' }],
+  foodId: [{ required: true, message: '请选择食品', trigger: 'change' }],
+  weekDay: [{ required: true, message: '请选择星期', trigger: 'change' }],
+  taste: [{ required: true, message: '请选择口味', trigger: 'change' }]
+})
+
+// 方法
+const foodFullImg = (foodImg) => {
+  return 'http://localhost:9999/yyzx/images/' + (foodImg || 'default.jpg')
+}
+
+// 初始化加载数据
+onMounted(() => {
+  getFoodList()
+  getMealList(1)
+  getMealList(2)
+  getMealList(3)
+})
+
+// 监听星期变化
+watch(() => queryParams.value.weekDay, (newVal) => {
+  queryParams.value.weekDay = newVal
+  getMealList(1)
+  getMealList(2)
+  getMealList(3)
+})
+
+// 获取餐食列表
+const getMealList = async (typeId) => {
+  try {
+    const params = {
+      ...queryParams.value,
+      mealType: typeId,
+      currentPage: 1, // 重置页码
+      mealId: 0       // 默认不按mealId查询
+    }
+    
+    const res = await findMeal(params)
+    
+    if (typeId === 1) {
+      breakfastList.value = res.data?.records || []
+    } else if (typeId === 2) {
+      lunchList.value = res.data?.records || []
+    } else {
+      dinnerList.value = res.data?.records || []
+    }
+  } catch (err) {
+    console.error(`获取${typeId}类型餐食失败:`, err)
+    ElMessage.error(`获取${mealtypeList.value.find(m => m.typeId === typeId)?.mealtypeName || typeId}数据失败`)
+  }
+}
+
+// 获取食品列表
+const getFoodList = async () => {
+  try {
+    const res = await findFood({ currentPage: 1, pageSize: 1000 })
+    foodList.value = res.data?.records || []
+  } catch (err) {
+    console.error('获取食品列表失败:', err)
+    ElMessage.error('获取食品列表失败')
+  }
+}
+
+// 编辑操作
+const edit = (meal, mealType) => {
+  dialog.value.tops = "修改膳食日历"
+  dialog.value.dialogVisible = true
+  dialog.value.item = {
+    ...meal,
+    mealType: mealType
+  }
+}
+
+// 添加操作
+const addItem = () => {
+  dialog.value.tops = "添加膳食管理"
+  dialog.value.dialogVisible = true
+  dialog.value.item = {
+    id: "",
+    foodId: "",
+    foodName: "",
+    foodType: "",
+    price: "",
+    isHalal: "",
+    weekDay: queryParams.value.weekDay,
+    mealType: queryParams.value.mealType,
+    taste: "",
+    isDeleted: 0
+  }
+}
+
+// 保存操作
+const save = async () => {
+  try {
+    await itemForm.value.validate()
+    
+    const isUpdate = !!dialog.value.item.id
+    const apiCall = isUpdate ? updateMeal : addMeal
+    
+    const res = await apiCall(dialog.value.item)
+    if (res.flag) {
+      ElMessage.success(res.message)
+      getMealList(dialog.value.item.mealType)
+      dialog.value.dialogVisible = false
+    } else {
+      ElMessage.error(res.message)
+    }
+  } catch (err) {
+    console.error('保存失败:', err)
+    ElMessage.error('保存失败')
+  }
+}
+
+// 删除操作
+const del = (id, mealType) => {
+  ElMessageBox.confirm('确定删除此记录吗?', '警告', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async () => {
+    try {
+      const res = await delMeal({ id })
+      if (res.flag) {
+        ElMessage.success(res.message)
+        getMealList(mealType)
+      } else {
+        ElMessage.error(res.message)
+      }
+    } catch (err) {
+      console.error('删除失败:', err)
+      ElMessage.error('删除失败')
+    }
+  }).catch(() => {})
+}
+
+// 标签页切换
+const handleTabClick = (tab) => {
+  queryParams.value.weekDay = weekdayList.value[tab.index]
+}
+
+// 切换餐食类型
+const changeType = (typeId) => {
+  queryParams.value.mealType = typeId
+}
 </script>
+
+<!-- <script setup>
+import { 
+  ref, 
+  onMounted, 
+  watch, 
+  nextTick 
+} from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Plus, EditPen, Close } from '@element-plus/icons-vue'
+
+// API 导入
+import {
+  addMeal,
+  updateMeal,
+  delMeal,
+  findMeal
+} from "../../api/mealApi.js"
+import { findFood } from "../../api/foodApi.js"
+
+// 响应式数据
+const dialog = ref({
+  dialogVisible: false,
+  tops: "",
+  item: {
+    id: "",
+    foodId: "",
+    foodName: "",
+    foodType: "",
+    price: "",
+    isHala: false,  // 修正字段名（原isHalal会与模板不匹配）
+    weekDay: "周一", // 添加默认值
+    mealType: 1,    // 默认早餐
+    taste: "正常",   // 默认口味
+    isDeleted: 0
+  }
+})
+
+const mealtypeList = ref([
+  {typeId:1, mealtypeName:'早餐'},
+  {typeId:2, mealtypeName:'午餐'},
+  {typeId:3, mealtypeName:'晚餐'}
+])
+
+const weekdayList = ref(['周一','周二','周三','周四','周五','周六','周日'])
+const queryParams = ref({
+  mealType: 1,
+  weekDay: "周一", // 默认周一
+  pageSize: "1"
+})
+
+const breakfastList = ref([])
+const lunchList = ref([])
+const dinnerList = ref([])
+const foodList = ref([])
+const loading = ref(false)
+const itemForm = ref(null)
+
+// 表单验证规则
+const rules = ref({
+  mealType: [{ required: true, message: '请选择膳食类型', trigger: 'blur' }],
+  foodId: [{ required: true, message: '请选择食品', trigger: 'blur' }],
+  weekDay: [{ required: true, message: '请选择星期', trigger: 'blur' }],
+  taste: [{ required: true, message: '请选择口味', trigger: 'blur' }]
+})
+
+// 方法 - 获取完整图片路径
+const foodFullImg = (foodImg) => {
+  return 'http://localhost:9999/yyzx/images/' + (foodImg || 'default.jpg')
+}
+
+// 初始化加载数据
+const loadInitialData = () => {
+  loading.value = true
+  Promise.all([
+    getMealList(1), // 早餐
+    getMealList(2), // 午餐
+    getMealList(3), // 晚餐
+    getFoodList()   // 食品列表
+  ]).finally(() => {
+    loading.value = false
+  })
+}
+
+// 获取餐食列表
+const getMealList = async (typeId) => {
+  try {
+    queryParams.value.mealType = typeId
+    const res = await findMeal(queryParams.value)
+    
+    // 根据类型分配数据
+    if (typeId === 1) breakfastList.value = res.data?.records || []
+    else if (typeId === 2) lunchList.value = res.data?.records || []
+    else dinnerList.value = res.data?.records || []
+    
+  } catch (err) {
+    console.error(`获取${typeId}类型餐食失败:`, err)
+    ElMessage.error('加载数据失败')
+  }
+}
+
+// 获取食品列表（关键修改：确保返回数组并处理异常）
+const getFoodList = async () => {
+  try {
+    const res = await findFood()
+    foodList.value = res.data?.records || [] // 确保数据结构正确
+    if (foodList.value.length === 0) {
+      ElMessage.warning('暂无食品数据')
+    }
+  } catch (err) {
+    console.error('加载食品列表失败:', err)
+    ElMessage.error('加载食品列表失败')
+    foodList.value = [] // 保证始终是数组
+  }
+}
+
+// 编辑操作
+const edit = (meal, mealType) => {
+  dialog.value.tops = "修改膳食日历"
+  dialog.value.item = {
+    ...meal,
+    mealType: mealType // 设置当前餐类型
+  }
+  dialog.value.dialogVisible = true
+}
+
+// 添加操作（关键修改：完整初始化表单数据）
+const addItem = () => {
+  dialog.value.tops = "添加膳食管理"
+  dialog.value.item = {
+    id: "",
+    foodId: "",
+    foodName: "",
+    foodType: "",
+    price: "",
+    isHala: false,
+    weekDay: queryParams.value.weekDay, // 默认当前选中星期
+    mealType: 1,      // 默认早餐
+    taste: "正常",     // 默认口味
+    isDeleted: 0
+  }
+  dialog.value.dialogVisible = true
+}
+
+// 关闭对话框
+const handleClose = () => {
+  dialog.value.dialogVisible = false
+  resetForm()
+}
+
+// 重置表单
+const resetForm = () => {
+  itemForm.value?.resetFields()
+}
+
+// 保存数据（关键修改：增强错误处理）
+const save = async (formName) => {
+  try {
+    await itemForm.value.validate()
+    loading.value = true
+    
+    // 根据ID判断是新增还是修改
+    const apiCall = dialog.value.item.id 
+      ? updateMeal(dialog.value.item)
+      : addMeal(dialog.value.item)
+
+    const res = await apiCall
+    if (res.flag) {
+      ElMessage.success(res.message)
+      // 刷新当前类型的餐食列表
+      getMealList(dialog.value.item.mealType)
+      handleClose()
+    } else {
+      ElMessage.error(res.message)
+    }
+  } catch (err) {
+    console.error('保存失败:', err)
+    ElMessage.error(err.message || '操作失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 删除操作
+const del = (id, mealtype) => {
+  ElMessageBox.confirm('确认删除这条记录吗?', '警告', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async () => {
+    try {
+      const res = await delMeal({ id })
+      if (res.flag) {
+        ElMessage.success(res.message)
+        getMealList(mealtype) // 刷新对应类型的列表
+      } else {
+        ElMessage.error(res.message)
+      }
+    } catch (err) {
+      console.error('删除失败:', err)
+      ElMessage.error('删除失败')
+    }
+  }).catch(() => {})
+}
+
+// 标签页切换
+const handleTabClick = (tab) => {
+  queryParams.value.weekDay = weekdayList.value[tab.index]
+}
+
+// 转换餐食类型显示文字
+const changeType = (typeId) => {
+  queryParams.value.mealType = typeId
+}
+
+// 生命周期钩子
+onMounted(() => {
+  loadInitialData()
+})
+
+// 监听星期变化
+watch(() => queryParams.value.weekDay, () => {
+  // 当星期变化时重新加载所有餐食类型
+  getMealList(1)
+  getMealList(2)
+  getMealList(3)
+})
+</script> -->
 
 <style scoped >
 .activeBtn {
